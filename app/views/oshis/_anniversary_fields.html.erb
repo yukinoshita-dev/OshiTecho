@@ -1,0 +1,17 @@
+<div class="flex items-center gap-2 mb-2 anniversary-fields">
+  <%= form.hidden_field :id %>
+  <%= form.text_field :name, placeholder: "例：デビュー記念日",
+        class: "flex-1 px-3 py-2 rounded border text-sm",
+        style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+  <%= form.date_field :date,
+        class: "px-3 py-2 rounded border text-sm",
+        style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+  <label class="flex items-center gap-1 text-xs text-muted shrink-0">
+    <%= form.check_box :yearly, class: "rounded" %>
+    毎年
+  </label>
+  <label class="flex items-center gap-1 text-xs text-muted shrink-0">
+    <%= form.check_box :_destroy, class: "rounded" %>
+    削除
+  </label>
+</div>

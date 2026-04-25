@@ -8,7 +8,7 @@
   <% if authenticated? %>
     <div class="flex items-center gap-1 flex-wrap">
       <%= link_to "ダッシュボード", root_path, class: "tab-seal" %>
-      <%= link_to "推し一覧", "#", class: "tab-seal" %>
+      <%= link_to "推し一覧", oshis_path, class: "tab-seal" %>
       <%= link_to "記録", "#", class: "tab-seal" %>
     </div>
   <% end %>

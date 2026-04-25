@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resource :theme, only: [:update]
   resource :registration, only: [:new, :create]
   resource :profile, only: [:edit, :update]
+  resources :oshis
   get "users/:username", to: "profiles#show", as: :user_profile
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_25_195122) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_25_195331) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,33 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_25_195122) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "oshi_anniversaries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.string "name", null: false
+    t.bigint "oshi_id", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "yearly", default: false, null: false
+    t.index ["oshi_id"], name: "index_oshi_anniversaries_on_oshi_id"
+  end
+
+  create_table "oshis", force: :cascade do |t|
+    t.string "color", default: "#ff69b4"
+    t.datetime "created_at", null: false
+    t.string "hashtag"
+    t.string "instagram_url"
+    t.string "name", null: false
+    t.text "note"
+    t.integer "position", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.string "tiktok_url"
+    t.string "twitter_url"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.string "youtube_url"
+    t.index ["user_id"], name: "index_oshis_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -66,5 +93,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_25_195122) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "oshi_anniversaries", "oshis"
+  add_foreign_key "oshis", "users"
   add_foreign_key "sessions", "users"
 end

@@ -1,0 +1,18 @@
+ja:
+  oshi:
+    status:
+      active: "現役"
+      graduated: "卒業"
+      hiatus: "活動休止"
+  event:
+    event_type:
+      live: "ライブ"
+      handshake: "握手会"
+      talk: "トークイベント"
+      online: "オンライン"
+      release: "リリースイベント"
+      other: "その他"
+    payment_status:
+      unpaid: "未払い"
+      paid: "支払済み"
+      refunded: "払い戻し済み"

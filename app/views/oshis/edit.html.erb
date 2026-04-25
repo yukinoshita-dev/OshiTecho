@@ -1,0 +1,5 @@
+<%= content_for :title, "#{@oshi.name} を編集 | 推し手帳" %>
+
+<h1 class="text-2xl font-bold mb-6" style="font-family: var(--font-heading);"><%= @oshi.name %> を編集</h1>
+
+<%= render "form", oshi: @oshi %>

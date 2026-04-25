@@ -1,0 +1,107 @@
+<%= form_with model: oshi, multipart: true do |form| %>
+  <% if oshi.errors.any? %>
+    <div class="mb-4 p-3 rounded text-sm" style="background: var(--color-badge-bg); color: var(--color-badge-text);">
+      <% oshi.errors.full_messages.each do |msg| %>
+        <p>・<%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="notebook-card mb-4 space-y-4">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">基本情報</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <%= form.label :name, "推し名 *", class: "block text-sm font-medium mb-1" %>
+        <%= form.text_field :name, required: true, placeholder: "例：田中花子",
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :status, "ステータス", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :status, Oshi.statuses.keys.map { |s| [I18n.t("oshi.status.#{s}", default: s), s] },
+              {},
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :color, "イメージカラー", class: "block text-sm font-medium mb-1" %>
+        <div class="flex items-center gap-2">
+          <%= form.color_field :color, class: "w-10 h-10 rounded border cursor-pointer p-0.5",
+                style: "border-color: var(--color-border);" %>
+          <%= form.text_field :color, placeholder: "#ff69b4",
+                class: "flex-1 px-3 py-2 rounded border text-sm font-mono",
+                style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);",
+                data: { action: "input->oshi-color#sync" } %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :hashtag, "ハッシュタグ", class: "block text-sm font-medium mb-1" %>
+        <div class="flex items-center gap-1">
+          <span class="text-muted">#</span>
+          <%= form.text_field :hashtag, placeholder: "例：田中花子",
+                class: "flex-1 px-3 py-2 rounded border text-sm",
+                style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :note, "メモ", class: "block text-sm font-medium mb-1" %>
+      <%= form.text_area :note, rows: 3, placeholder: "推しへの想いを書いておこう（最大1000文字）",
+            class: "w-full px-3 py-2 rounded border text-sm",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+  </div>
+
+  <%# 画像 %>
+  <div class="notebook-card mb-4">
+    <h2 class="font-bold ruled-line mb-3" style="font-family: var(--font-heading);">画像</h2>
+    <div class="flex items-center gap-4">
+      <% if oshi.image.attached? %>
+        <%= image_tag oshi.image, class: "w-16 h-16 rounded-full object-cover", style: "border: 2px solid var(--color-border);" %>
+      <% end %>
+      <%= form.file_field :image, accept: "image/*",
+            class: "text-sm",
+            style: "color: var(--color-text-muted);" %>
+    </div>
+  </div>
+
+  <%# SNSリンク %>
+  <div class="notebook-card mb-4 space-y-3">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">SNSリンク</h2>
+    <% [[:twitter_url, "𝕏 Twitter/X URL"], [:instagram_url, "📷 Instagram URL"],
+        [:youtube_url, "▶ YouTube URL"], [:tiktok_url, "♪ TikTok URL"]].each do |field, label| %>
+      <div>
+        <%= form.label field, label, class: "block text-xs font-medium mb-1 text-muted" %>
+        <%= form.url_field field, placeholder: "https://...",
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# 記念日 %>
+  <div class="notebook-card mb-6">
+    <h2 class="font-bold ruled-line mb-3" style="font-family: var(--font-heading);">記念日</h2>
+    <div id="anniversaries">
+      <%= form.fields_for :anniversaries do |af| %>
+        <%= render "anniversary_fields", form: af %>
+      <% end %>
+    </div>
+    <button type="button"
+            class="tab-seal text-xs mt-2"
+            data-action="click->anniversary#add">
+      ＋ 記念日を追加
+    </button>
+  </div>
+
+  <div class="flex gap-3">
+    <%= form.submit oshi.persisted? ? "更新する" : "登録する",
+          class: "btn-primary cursor-pointer" %>
+    <%= link_to "キャンセル", oshis_path, class: "tab-seal" %>
+  </div>
+<% end %>

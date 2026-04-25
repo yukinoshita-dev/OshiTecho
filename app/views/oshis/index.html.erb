@@ -1,0 +1,80 @@
+<%= content_for :title, "推し一覧 | 推し手帳" %>
+
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);">推し一覧</h1>
+  <%= link_to "＋ 推しを追加", new_oshi_path, class: "btn-primary" %>
+</div>
+
+<% if @oshis.empty? %>
+  <div class="notebook-card text-center py-12">
+    <p class="text-4xl mb-3">🌟</p>
+    <p class="font-medium mb-1">まだ推しが登録されていません</p>
+    <p class="text-muted text-sm mb-4">大切な推しを登録してみましょう</p>
+    <%= link_to "推しを登録する", new_oshi_path, class: "btn-primary" %>
+  </div>
+<% else %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <% @oshis.each do |oshi| %>
+      <div class="notebook-card relative overflow-hidden">
+        <%# イメージカラーアクセント %>
+        <div class="absolute top-0 left-0 right-0 h-1 rounded-t" style="background-color: <%= oshi.color %>;"></div>
+
+        <div class="flex items-start gap-3 mt-1">
+          <%# アイコン %>
+          <% if oshi.image.attached? %>
+            <%= image_tag oshi.image, class: "w-14 h-14 rounded-full object-cover shrink-0", style: "border: 2px solid #{oshi.color};" %>
+          <% else %>
+            <div class="w-14 h-14 rounded-full flex items-center justify-center text-2xl shrink-0"
+                 style="background-color: <%= oshi.color %>22; border: 2px solid <%= oshi.color %>;">
+              🌟
+            </div>
+          <% end %>
+
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="font-bold text-base truncate"><%= oshi.name %></h2>
+              <% if oshi.graduated? %>
+                <span class="stamp-badge text-xs">卒業</span>
+              <% elsif oshi.hiatus? %>
+                <span class="stamp-badge text-xs">活動休止</span>
+              <% end %>
+            </div>
+            <% if oshi.hashtag.present? %>
+              <p class="text-sm text-muted truncate">#<%= oshi.hashtag %></p>
+            <% end %>
+            <% if oshi.note.present? %>
+              <p class="text-sm mt-1 line-clamp-2" style="color: var(--color-text-muted);"><%= oshi.note %></p>
+            <% end %>
+          </div>
+        </div>
+
+        <%# SNSリンク %>
+        <% sns_links = [
+          [oshi.twitter_url, "𝕏", "Twitter/X"],
+          [oshi.instagram_url, "📷", "Instagram"],
+          [oshi.youtube_url, "▶", "YouTube"],
+          [oshi.tiktok_url, "♪", "TikTok"]
+        ].select { |url, _, _| url.present? } %>
+        <% if sns_links.any? %>
+          <div class="flex gap-2 mt-3 pt-3" style="border-top: 1px solid var(--color-border);">
+            <% sns_links.each do |url, icon, label| %>
+              <%= link_to url, target: "_blank", rel: "noopener", title: label,
+                    class: "stamp-badge hover:opacity-80" do %>
+                <%= icon %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+
+        <%# アクション %>
+        <div class="flex gap-2 mt-3 pt-3" style="border-top: 1px solid var(--color-border);">
+          <%= link_to "詳細", oshi_path(oshi), class: "tab-seal text-xs" %>
+          <%= link_to "編集", edit_oshi_path(oshi), class: "tab-seal text-xs" %>
+          <%= button_to "削除", oshi_path(oshi), method: :delete,
+                data: { turbo_confirm: "#{oshi.name} を削除してよいですか？" },
+                class: "tab-seal text-xs cursor-pointer" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

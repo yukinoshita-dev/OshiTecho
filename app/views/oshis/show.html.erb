@@ -1,0 +1,81 @@
+<%= content_for :title, "#{@oshi.name} | 推し手帳" %>
+
+<div class="max-w-2xl mx-auto">
+  <%# ヘッダー %>
+  <div class="notebook-card mb-4 relative overflow-hidden">
+    <div class="absolute top-0 left-0 right-0 h-2" style="background-color: <%= @oshi.color %>;"></div>
+    <div class="flex items-start gap-4 mt-2">
+      <% if @oshi.image.attached? %>
+        <%= image_tag @oshi.image, class: "w-20 h-20 rounded-full object-cover shrink-0", style: "border: 3px solid #{@oshi.color};" %>
+      <% else %>
+        <div class="w-20 h-20 rounded-full flex items-center justify-center text-3xl shrink-0"
+             style="background-color: <%= @oshi.color %>22; border: 3px solid <%= @oshi.color %>;">
+          🌟
+        </div>
+      <% end %>
+
+      <div class="flex-1">
+        <div class="flex items-center gap-3 flex-wrap">
+          <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);"><%= @oshi.name %></h1>
+          <% if @oshi.graduated? %>
+            <span class="stamp-badge">卒業</span>
+          <% elsif @oshi.hiatus? %>
+            <span class="stamp-badge">活動休止</span>
+          <% end %>
+        </div>
+        <% if @oshi.hashtag.present? %>
+          <p class="text-muted text-sm mt-1">#<%= @oshi.hashtag %></p>
+        <% end %>
+
+        <%# SNSリンク %>
+        <% sns_links = [
+          [@oshi.twitter_url, "𝕏"],
+          [@oshi.instagram_url, "📷"],
+          [@oshi.youtube_url, "▶"],
+          [@oshi.tiktok_url, "♪"]
+        ].select { |url, _| url.present? } %>
+        <% if sns_links.any? %>
+          <div class="flex gap-2 mt-2">
+            <% sns_links.each do |url, icon| %>
+              <%= link_to icon, url, target: "_blank", rel: "noopener", class: "stamp-badge hover:opacity-80" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%# メモ %>
+  <% if @oshi.note.present? %>
+    <div class="notebook-card mb-4">
+      <h2 class="font-bold text-sm text-muted mb-2">メモ</h2>
+      <p class="text-sm leading-relaxed"><%= simple_format(@oshi.note) %></p>
+    </div>
+  <% end %>
+
+  <%# 記念日 %>
+  <% if @oshi.anniversaries.any? %>
+    <div class="notebook-card mb-4">
+      <h2 class="font-bold ruled-line mb-3" style="font-family: var(--font-heading);">記念日</h2>
+      <ul class="space-y-2">
+        <% @oshi.anniversaries.ordered.each do |ann| %>
+          <li class="flex items-center justify-between text-sm">
+            <span><%= ann.name %></span>
+            <span class="text-muted">
+              <%= ann.date.strftime("%Y年%m月%d日") %>
+              <% if ann.yearly? %><span class="stamp-badge ml-1">毎年</span><% end %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="flex gap-3">
+    <%= link_to "編集", edit_oshi_path(@oshi), class: "btn-primary" %>
+    <%= link_to "一覧に戻る", oshis_path, class: "tab-seal" %>
+    <%= button_to "削除", oshi_path(@oshi), method: :delete,
+          data: { turbo_confirm: "#{@oshi.name} を削除してよいですか？" },
+          class: "tab-seal cursor-pointer ml-auto" %>
+  </div>
+</div>
