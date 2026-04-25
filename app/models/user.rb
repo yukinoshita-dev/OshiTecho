@@ -4,6 +4,14 @@ class User < ApplicationRecord
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
+  validates :email_address, presence: true, uniqueness: { case_sensitive: false },
+                            format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :username, uniqueness: { case_sensitive: false, allow_blank: true },
+                       format: { with: /\A[a-z0-9_]+\z/, message: "は半角英数字とアンダースコアのみ使用できます", allow_blank: true },
+                       length: { maximum: 30 }
+  validates :display_name, length: { maximum: 50 }
+  validates :bio, length: { maximum: 200 }
+
   THEMES = %w[classic girly natural cool].freeze
   validates :theme, inclusion: { in: THEMES }
 end

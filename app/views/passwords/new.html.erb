@@ -1,17 +1,26 @@
-<div class="mx-auto md:w-2/3 w-full">
-  <% if alert = flash[:alert] %>
-    <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium rounded-lg inline-block" id="alert"><%= alert %></p>
-  <% end %>
+<%= content_for :title, "パスワードリセット | 推し手帳" %>
 
-  <h1 class="font-bold text-4xl">Forgot your password?</h1>
+<div class="max-w-md mx-auto mt-8">
+  <div class="notebook-card">
+    <h1 class="text-2xl font-bold mb-1 ruled-line" style="font-family: var(--font-heading);">パスワードをお忘れですか？</h1>
+    <p class="text-muted text-sm mb-6">登録したメールアドレスにリセット手順を送信します</p>
 
-  <%= form_with url: passwords_path, class: "contents" do |form| %>
-    <div class="my-5">
-      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "block shadow-sm rounded-md border border-gray-400 focus:outline-solid focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+    <%= form_with url: passwords_path do |form| %>
+      <div class="mb-6">
+        <%= form.label :email_address, "メールアドレス", class: "block text-sm font-medium mb-1" %>
+        <%= form.email_field :email_address,
+              required: true, autofocus: true, autocomplete: "username",
+              placeholder: "example@example.com",
+              value: params[:email_address],
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <%= form.submit "リセットメールを送る", class: "btn-primary cursor-pointer w-full text-center" %>
+    <% end %>
+
+    <div class="mt-6 pt-4 border-t text-sm text-center" style="border-color: var(--color-border);">
+      <%= link_to "ログインに戻る", new_session_path, class: "text-primary font-medium underline hover:no-underline" %>
     </div>
-
-    <div class="inline">
-      <%= form.submit "Email reset instructions", class: "w-full sm:w-auto text-center rounded-lg px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white inline-block font-medium cursor-pointer" %>
-    </div>
-  <% end %>
+  </div>
 </div>
