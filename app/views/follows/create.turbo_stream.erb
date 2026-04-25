@@ -1,0 +1,6 @@
+<%= turbo_stream.replace "follow-button-#{@target_user.id}" do %>
+  <%= render "follow_button", target_user: @target_user %>
+<% end %>
+<%= turbo_stream.replace "follow-stats-#{@target_user.id}" do %>
+  <%= render "profiles/follow_stats", user: @target_user %>
+<% end %>

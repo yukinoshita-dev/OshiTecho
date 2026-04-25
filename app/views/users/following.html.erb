@@ -1,0 +1,17 @@
+<%= content_for :title, "フォロー中 | 推し手帳" %>
+
+<h1 class="text-2xl font-bold mb-6" style="font-family: var(--font-heading);">
+  <%= @user.display_name.presence || @user.username %> のフォロー中
+</h1>
+
+<% if @users.empty? %>
+  <div class="notebook-card text-center py-8">
+    <p class="text-muted text-sm">フォロー中のユーザーはいません</p>
+  </div>
+<% else %>
+  <div class="space-y-3">
+    <% @users.each do |user| %>
+      <%= render "user_card", user: user %>
+    <% end %>
+  </div>
+<% end %>

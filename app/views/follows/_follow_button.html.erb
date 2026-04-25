@@ -1,0 +1,20 @@
+<div id="follow-button-<%= target_user.id %>">
+  <% if Current.user && Current.user != target_user %>
+    <% if Current.user.following?(target_user) %>
+      <%= button_to "フォロー中",
+            user_follow_path(target_user),
+            method: :delete,
+            form: { data: { turbo_stream: true } },
+            class: "tab-seal cursor-pointer" %>
+    <% else %>
+      <%= button_to "フォローする",
+            user_follow_path(target_user),
+            method: :post,
+            form: { data: { turbo_stream: true } },
+            class: "btn-primary cursor-pointer" %>
+    <% end %>
+    <% if Current.user.ff?(target_user) %>
+      <span class="stamp-badge text-xs ml-1">相互フォロー</span>
+    <% end %>
+  <% end %>
+</div>

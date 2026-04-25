@@ -1,0 +1,23 @@
+<div class="notebook-card flex items-center gap-3">
+  <% if user.avatar.attached? %>
+    <%= image_tag user.avatar, class: "w-12 h-12 rounded-full object-cover shrink-0", style: "border: 2px solid var(--color-border);" %>
+  <% else %>
+    <div class="w-12 h-12 rounded-full flex items-center justify-center text-xl shrink-0"
+         style="background: var(--color-badge-bg); border: 2px solid var(--color-border);">
+      👤
+    </div>
+  <% end %>
+
+  <div class="flex-1 min-w-0">
+    <% if user.username.present? %>
+      <%= link_to user_profile_path(user.username), class: "font-bold hover:underline" do %>
+        <%= user.display_name.presence || user.username %>
+      <% end %>
+      <p class="text-xs text-muted">@<%= user.username %></p>
+    <% else %>
+      <p class="font-bold"><%= user.display_name.presence || user.email_address %></p>
+    <% end %>
+  </div>
+
+  <%= render "follows/follow_button", target_user: user %>
+</div>

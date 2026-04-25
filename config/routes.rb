@@ -10,6 +10,11 @@ Rails.application.routes.draw do
               controller: "event_participations"
   end
   get "users/:username", to: "profiles#show", as: :user_profile
+  resources :users, only: [] do
+    resource :follow, only: [:create, :destroy], controller: "follows"
+    get :following, on: :member
+    get :followers, on: :member
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
