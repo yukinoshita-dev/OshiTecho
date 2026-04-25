@@ -21,6 +21,18 @@
   </head>
 
   <body class="min-h-screen" style="background-color: var(--color-bg); color: var(--color-text);">
-    <%= yield %>
+    <div class="max-w-5xl mx-auto px-4 py-4">
+      <%= render "shared/nav" %>
+
+      <% if flash.any? %>
+        <div class="mb-4">
+          <%= render "shared/flash" %>
+        </div>
+      <% end %>
+
+      <main>
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

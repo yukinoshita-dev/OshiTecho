@@ -1,0 +1,39 @@
+<nav class="notebook-card mb-6 flex items-center justify-between gap-4">
+  <%# ロゴ %>
+  <%= link_to root_path, class: "flex items-center gap-2 shrink-0" do %>
+    <span class="text-xl" style="font-family: var(--font-heading);">📔 推し手帳</span>
+  <% end %>
+
+  <%# メインナビ %>
+  <% if authenticated? %>
+    <div class="flex items-center gap-1 flex-wrap">
+      <%= link_to "ダッシュボード", root_path, class: "tab-seal" %>
+      <%= link_to "推し一覧", "#", class: "tab-seal" %>
+      <%= link_to "記録", "#", class: "tab-seal" %>
+    </div>
+  <% end %>
+
+  <div class="flex items-center gap-3 shrink-0 ml-auto">
+    <%# テーマ切り替え %>
+    <% if authenticated? %>
+      <div class="flex items-center gap-1">
+        <% [["classic", "🪵"], ["girly", "🌸"], ["natural", "🌿"], ["cool", "🌙"]].each do |theme, icon| %>
+          <button data-action="click->theme#change"
+                  data-theme="<%= theme %>"
+                  title="<%= theme %>"
+                  class="w-7 h-7 rounded-full border-2 transition-all text-xs
+                         <%= Current.user&.theme == theme ? "border-current scale-110" : "border-transparent opacity-60 hover:opacity-100" %>">
+            <%= icon %>
+          </button>
+        <% end %>
+      </div>
+
+      <%# ユーザーメニュー %>
+      <div class="flex items-center gap-2">
+        <span class="text-muted text-sm hidden sm:inline"><%= Current.user.email_address %></span>
+        <%= button_to "ログアウト", session_path, method: :delete,
+              class: "tab-seal text-xs cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+</nav>
