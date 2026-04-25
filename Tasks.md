@@ -9,84 +9,85 @@
 
 ## Phase 1: 基盤構築
 
-### 1-1. プロジェクトセットアップ
-- [ ] Rails 8 プロジェクト作成（PostgreSQL・Tailwind CSS・Hotwire）
-- [ ] Gemfile 整備（RSpec, FactoryBot, Bullet, Pagy, Redcarpet 等）
-- [ ] Tailwind CSS v4 設定
+### 1-1. プロジェクトセットアップ ✅
+- [x] Rails 8 プロジェクト作成（PostgreSQL・Tailwind CSS・Hotwire）
+- [x] Gemfile 整備（RSpec, FactoryBot, Bullet, Pagy, Redcarpet 等）
+- [x] Tailwind CSS v4 設定
 
-### 1-2. テーマシステム構築
-- [ ] CSS Custom Properties で4テーマ定義（Classic / Girly / Natural / Cool）
-- [ ] `<html data-theme="...">` 切り替え方式の実装
-- [ ] Stimulus ThemeController 作成（クリックでテーマ切り替え）
-- [ ] テーマ切り替えUI（設定ページ or ヘッダーのトグル）
-- [ ] usersテーブルに theme カラム追加（マイグレーション）
-- [ ] ログイン時にDB値をhtmlタグに反映するApplicationControllerの before_action
+### 1-2. テーマシステム構築 ✅
+- [x] CSS Custom Properties で4テーマ定義（Classic / Girly / Natural / Cool）
+- [x] `<html data-theme="...">` 切り替え方式の実装
+- [x] Stimulus ThemeController 作成（クリックでテーマ切り替え）
+- [x] テーマ切り替えUI（ヘッダーのトグル）
+- [x] usersテーブルに theme カラム追加（マイグレーション）
+- [x] ログイン時にDB値をhtmlタグに反映
 - [ ] 未ログイン時はlocalStorageにフォールバック
 
-### 1-3. 手帳デザイン基盤
-- [ ] 共通レイアウト作成（ヘッダー・フッター・ボトムナビ）※モバイルファースト
-- [ ] ヘッダーにテーマ切り替えアイコン（🎨）を配置・ドロップダウンUI実装
-- [ ] インデックスシール風タブナビゲーションコンポーネント
-- [ ] ノートページ風カードコンポーネント
-- [ ] 罫線・日付ヘッダースタイル定義
-- [ ] スタンプ・シール風バッジコンポーネント
-- [ ] Flash メッセージ表示コンポーネント
+### 1-3. 手帳デザイン基盤 ✅
+- [x] 共通レイアウト作成（ヘッダー・Flashメッセージ）
+- [x] ヘッダーにテーマ切り替えアイコン配置
+- [x] インデックスシール風タブナビゲーションコンポーネント
+- [x] ノートページ風カードコンポーネント（.notebook-card）
+- [x] 罫線スタイル定義（.ruled-line）
+- [x] スタンプ・シール風バッジコンポーネント（.stamp-badge）
+- [x] Flash メッセージ表示コンポーネント
 - [ ] トップページLP作成（サービス説明・4テーマのデモ・公開イベントサンプル）
 - [ ] ログイン済みユーザーのトップアクセス時は /dashboard へリダイレクト
 
-### 1-4. 認証機能
-- [ ] Rails 8 Authentication Generator 実行
-- [ ] usersテーブルにusername / display_name / bio追加マイグレーション
-- [ ] ユーザー登録画面 UI
-- [ ] ログイン画面 UI
-- [ ] ログアウト機能
+### 1-4. 認証機能 ✅
+- [x] Rails 8 Authentication Generator 実行
+- [x] usersテーブルにusername / display_name / bio追加マイグレーション
+- [x] ユーザー登録画面 UI
+- [x] ログイン画面 UI
+- [x] ログアウト機能
 
-### 1-5. ユーザープロフィール
-- [ ] プロフィール編集画面（display_name / bio / アバター）
-- [ ] Active Storage 設定（アバター画像アップロード）
-- [ ] 公開プロフィールページ（/users/:username）
+### 1-5. ユーザープロフィール ✅
+- [x] プロフィール編集画面（display_name / bio / アバター）
+- [x] Active Storage 設定（アバター画像アップロード）
+- [x] 公開プロフィールページ（/users/:username）
 
 ---
 
 ## Phase 2: 推し・イベント機能
 
-### 2-1. 推し管理
-- [ ] oshisテーブル作成・マイグレーション（color / hashtag / SNSリンク4種 含む）
-- [ ] oshi_anniversariesテーブル作成・マイグレーション
-- [ ] Oshiモデル（バリデーション・enum・has_many :anniversaries）
-- [ ] OshiAnniversaryモデル（バリデーション）
-- [ ] 推し一覧ページ（カテゴリ・50音順フィルター付き）
-- [ ] 推し登録・編集フォーム（Turbo Frame活用・カラーピッカー・記念日はネスト入力）
-- [ ] 推し削除（確認ダイアログ）
-- [ ] 推し画像アップロード（Active Storage）
-- [ ] 推し詳細ページにSNSリンクボタン・イメージカラー反映
+### 2-1. 推し管理 ✅
+- [x] oshisテーブル作成・マイグレーション（color / hashtag / SNSリンク4種 含む）
+- [x] oshi_anniversariesテーブル作成・マイグレーション
+- [x] Oshiモデル（バリデーション・enum・has_many :anniversaries）
+- [x] OshiAnniversaryモデル（バリデーション）
+- [x] 推し一覧ページ（カードグリッド・SNSリンク・空状態UI）
+- [x] 推し登録・編集フォーム（カラーピッカー・記念日はネスト入力）
+- [x] 推し削除（確認ダイアログ）
+- [x] 推し画像アップロード（Active Storage）
+- [x] 推し詳細ページにSNSリンクボタン・イメージカラー反映
+- [ ] 推し一覧：カテゴリ・50音順フィルター
 
-### 2-2. イベント管理
-- [ ] eventsテーブル作成・マイグレーション（開場/開演/終演・チケット代・支払状況・座席・遠征・交通手段 含む）
-- [ ] Eventモデル（バリデーション・enum複数（event_type/payment_status/transport）・visibility）
-- [ ] イベント一覧ページ（推し別・期間・種別・遠征有無フィルター付き）
-- [ ] イベント登録・編集フォーム（時刻3項目・支払状況・遠征トグル・交通手段セレクト）
-- [ ] イベント削除
-- [ ] 公開/非公開切り替えUI
+### 2-2. イベント管理 ✅
+- [x] eventsテーブル作成・マイグレーション（開場/開演/終演・チケット代・支払状況・座席・遠征・交通手段 含む）
+- [x] Eventモデル（バリデーション・enum複数・visibility）
+- [x] イベント一覧ページ（推し別・予定/過去フィルター付き）
+- [x] イベント登録・編集フォーム（時刻3項目・支払状況・遠征トグル・交通手段セレクト）
+- [x] イベント削除
+- [x] 公開/非公開切り替えUI
 - [ ] 公開タイムライン（/）にイベント表示
 
-### 2-3. イベント参加表明
-- [ ] event_participationsテーブル作成・マイグレーション
-- [ ] EventParticipationモデル
-- [ ] 参加表明ボタン（Turbo Streamでリアルタイム反映）
-- [ ] 参加者一覧表示（イベント詳細ページ）
-- [ ] 参加状態の切り替え（planning / attended / cancelled）
+### 2-3. イベント参加表明 ✅
+- [x] event_participationsテーブル作成・マイグレーション
+- [x] EventParticipationモデル（planning/attended/cancelled enum）
+- [x] 参加表明ボタン（Turbo Streamでリアルタイム反映）
+- [x] 参加者数カウント表示（イベント詳細ページ）
+- [x] 参加状態の切り替え（planning / attended / cancelled）
 
 ---
 
 ## Phase 3: フォロー・カレンダー機能
 
-### 3-1. フォロー機能
-- [ ] followsテーブル作成・マイグレーション
-- [ ] Followモデル・Userモデルにfollowing/followers/ff?メソッド追加
-- [ ] フォロー・アンフォローボタン（Turbo Streamで即時反映）
-- [ ] フォロー中一覧ページ
-- [ ] フォロワー一覧ページ
+### 3-1. フォロー機能 ✅
+- [x] followsテーブル作成・マイグレーション
+- [x] Followモデル・Userモデルにfollowing/followers/ff?メソッド追加
+- [x] フォロー・アンフォローボタン（Turbo Streamで即時反映）
+- [x] フォロー中一覧ページ
+- [x] フォロワー一覧ページ
 
 ### 3-2. FF限定カレンダー共有
 - [ ] FullCalendar.js導入（Stimulus経由）
@@ -121,13 +122,13 @@
 - [ ] 同行者メモ入力欄
 - [ ] 公開ログのタイムライン表示
 
-### 4-3. ダッシュボード
-- [ ] ダッシュボードコントローラー・ビュー
-- [ ] 今月の出費集計ウィジェット
-- [ ] 今月の参加イベント数ウィジェット
-- [ ] 推しごとの統計（イベント数・グッズ出費）
-- [ ] 近日開催イベント一覧
-- [ ] 最近の活動ログ
+### 4-3. ダッシュボード ✅
+- [x] ダッシュボードコントローラー・ビュー
+- [x] 今月の出費集計ウィジェット
+- [x] 今月の参加イベント数ウィジェット
+- [x] 推しごとの統計（イベント数・グッズ出費）
+- [x] 近日開催イベント一覧
+- [x] 最近の活動ログ
 
 ---
 
