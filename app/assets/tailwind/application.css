@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+/* ============================================================
+   OshiTecho テーマシステム
+   data-theme="classic" | "girly" | "natural" | "cool"
+   ============================================================ */
+
+/* Classic: 革手帳・クリーム×ゴールドブラウン */
+:root,
+[data-theme="classic"] {
+  --color-bg:        #faf8f2;
+  --color-surface:   #f5f0e8;
+  --color-border:    #d4b896;
+  --color-primary:   #8b6344;
+  --color-primary-hover: #6d4c33;
+  --color-accent:    #c9964a;
+  --color-text:      #3d2b1f;
+  --color-text-muted: #7a6050;
+  --color-badge-bg:  #e8d5b7;
+  --color-badge-text: #6b4226;
+  --color-line:      #d4b896;
+  --font-heading:    'Georgia', 'Times New Roman', serif;
+  --radius-card:     4px;
+  --shadow-card:     0 1px 4px rgba(139,99,68,0.15);
+}
+
+/* Girly: ほぼ日手帳・ベビーピンク×ピンク */
+[data-theme="girly"] {
+  --color-bg:        #fff5f7;
+  --color-surface:   #ffedf1;
+  --color-border:    #f9c0cc;
+  --color-primary:   #e8648a;
+  --color-primary-hover: #d44e74;
+  --color-accent:    #f48fb1;
+  --color-text:      #4a1a2c;
+  --color-text-muted: #a06070;
+  --color-badge-bg:  #fce4ec;
+  --color-badge-text: #c2185b;
+  --color-line:      #f9c0cc;
+  --font-heading:    'Hiragino Maru Gothic Pro', 'rounded-mplus', sans-serif;
+  --radius-card:     12px;
+  --shadow-card:     0 2px 8px rgba(232,100,138,0.12);
+}
+
+/* Natural: キャンプ日記・オフホワイト×グリーン */
+[data-theme="natural"] {
+  --color-bg:        #f8f7f2;
+  --color-surface:   #f0ede3;
+  --color-border:    #b5c4a8;
+  --color-primary:   #5a7a4a;
+  --color-primary-hover: #466038;
+  --color-accent:    #8aab72;
+  --color-text:      #2c3a28;
+  --color-text-muted: #647860;
+  --color-badge-bg:  #dce8d4;
+  --color-badge-text: #3a5c2e;
+  --color-line:      #b5c4a8;
+  --font-heading:    'Georgia', serif;
+  --radius-card:     6px;
+  --shadow-card:     0 1px 6px rgba(90,122,74,0.12);
+}
+
+/* Cool: ビジネス手帳・ダーク×インディゴ */
+[data-theme="cool"] {
+  --color-bg:        #0f1117;
+  --color-surface:   #1a1d27;
+  --color-border:    #2e3450;
+  --color-primary:   #5b6bd5;
+  --color-primary-hover: #4a5bc4;
+  --color-accent:    #818cf8;
+  --color-text:      #e4e8f0;
+  --color-text-muted: #8892a8;
+  --color-badge-bg:  #252a42;
+  --color-badge-text: #a5b4fc;
+  --color-line:      #2e3450;
+  --font-heading:    'Inter', system-ui, sans-serif;
+  --radius-card:     2px;
+  --shadow-card:     0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* ============================================================
+   ベーススタイル
+   ============================================================ */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, sans-serif;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* 手帳カード */
+.notebook-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 1rem;
+}
+
+/* 罫線 */
+.ruled-line {
+  border-bottom: 1px solid var(--color-line);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* スタンプバッジ */
+.stamp-badge {
+  background-color: var(--color-badge-bg);
+  color: var(--color-badge-text);
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* プライマリボタン */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-card);
+  padding: 0.5rem 1.25rem;
+  font-weight: 600;
+  transition: background-color 0.15s;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* インデックスシールタブ */
+.tab-seal {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 0.375rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  transition: all 0.15s;
+}
+.tab-seal.active,
+.tab-seal:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+/* ============================================================
+   ユーティリティ
+   ============================================================ */
+.text-primary   { color: var(--color-primary); }
+.text-muted     { color: var(--color-text-muted); }
+.bg-surface     { background-color: var(--color-surface); }
+.border-theme   { border-color: var(--color-border); }
