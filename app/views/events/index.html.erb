@@ -1,0 +1,81 @@
+<%= content_for :title, "イベント一覧 | 推し手帳" %>
+
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);">イベント一覧</h1>
+  <%= link_to "＋ イベントを追加", new_event_path, class: "btn-primary" %>
+</div>
+
+<%# フィルター %>
+<div class="flex gap-2 mb-6 flex-wrap">
+  <%= link_to "予定", events_path, class: "tab-seal #{params[:past] != '1' ? 'active' : ''}" %>
+  <%= link_to "過去", events_path(past: 1), class: "tab-seal #{params[:past] == '1' ? 'active' : ''}" %>
+  <% Current.user.oshis.ordered.each do |oshi| %>
+    <%= link_to oshi.name, events_path(oshi_id: oshi.id),
+          class: "tab-seal #{params[:oshi_id] == oshi.id.to_s ? 'active' : ''}" %>
+  <% end %>
+</div>
+
+<% if @events.empty? %>
+  <div class="notebook-card text-center py-12">
+    <p class="text-4xl mb-3">🎫</p>
+    <p class="font-medium mb-1">イベントはまだありません</p>
+    <p class="text-muted text-sm mb-4">参加したイベントや予定を記録しましょう</p>
+    <%= link_to "イベントを追加", new_event_path, class: "btn-primary" %>
+  </div>
+<% else %>
+  <div class="space-y-3">
+    <% @events.each do |event| %>
+      <div class="notebook-card relative overflow-hidden">
+        <%# 推しカラーアクセント %>
+        <div class="absolute left-0 top-0 bottom-0 w-1 rounded-l" style="background-color: <%= event.oshi.color %>;"></div>
+        <div class="ml-3">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="stamp-badge text-xs"><%= t("event.event_type.#{event.event_type}") %></span>
+                <% if event.public_visible? %>
+                  <span class="stamp-badge text-xs">公開</span>
+                <% end %>
+                <% if event.expedition? %>
+                  <span class="stamp-badge text-xs">遠征</span>
+                <% end %>
+              </div>
+              <h2 class="font-bold mt-1"><%= event.title %></h2>
+              <div class="flex items-center gap-3 text-sm text-muted mt-1 flex-wrap">
+                <span>📅 <%= event.event_date.strftime("%Y年%m月%d日") %></span>
+                <% if event.start_time %>
+                  <span>🕐 <%= event.start_time.strftime("%H:%M") %> 開演</span>
+                <% end %>
+                <% if event.venue.present? %>
+                  <span>📍 <%= event.venue %></span>
+                <% end %>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <% if event.ticket_price %>
+                <span class="text-sm font-medium">¥<%= number_with_delimiter(event.ticket_price) %></span>
+                <span class="stamp-badge text-xs"><%= t("event.payment_status.#{event.payment_status}") %></span>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="flex gap-2 mt-3 pt-3" style="border-top: 1px solid var(--color-border);">
+            <span class="text-xs text-muted flex items-center gap-1">
+              <% if event.oshi.image.attached? %>
+                <%= image_tag event.oshi.image, class: "w-4 h-4 rounded-full object-cover inline" %>
+              <% end %>
+              <%= event.oshi.name %>
+            </span>
+            <div class="ml-auto flex gap-2">
+              <%= link_to "詳細", event_path(event), class: "tab-seal text-xs" %>
+              <%= link_to "編集", edit_event_path(event), class: "tab-seal text-xs" %>
+              <%= button_to "削除", event_path(event), method: :delete,
+                    data: { turbo_confirm: "#{event.title} を削除してよいですか？" },
+                    class: "tab-seal text-xs cursor-pointer" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

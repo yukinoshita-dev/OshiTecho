@@ -1,0 +1,142 @@
+<%= form_with model: event do |form| %>
+  <% if event.errors.any? %>
+    <div class="mb-4 p-3 rounded text-sm" style="background: var(--color-badge-bg); color: var(--color-badge-text);">
+      <% event.errors.full_messages.each do |msg| %>
+        <p>・<%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="notebook-card mb-4 space-y-4">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">基本情報</h2>
+
+    <div>
+      <%= form.label :title, "タイトル *", class: "block text-sm font-medium mb-1" %>
+      <%= form.text_field :title, required: true, placeholder: "例：〇〇 春ツアー2026 東京公演",
+            class: "w-full px-3 py-2 rounded border text-sm",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <%= form.label :oshi_id, "推し *", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :oshi_id,
+              @oshis.map { |o| [o.name, o.id] },
+              { prompt: "選択してください" },
+              required: true,
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :event_type, "イベント種別", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :event_type,
+              Event.event_types.keys.map { |t| [I18n.t("event.event_type.#{t}"), t] },
+              {},
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :event_date, "開催日 *", class: "block text-sm font-medium mb-1" %>
+        <%= form.date_field :event_date, required: true,
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :venue, "会場", class: "block text-sm font-medium mb-1" %>
+        <%= form.text_field :venue, placeholder: "例：東京ドーム",
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+    </div>
+
+    <%# 時刻 %>
+    <div class="grid grid-cols-3 gap-3">
+      <% [[:open_time, "開場"], [:start_time, "開演"], [:end_time, "終演"]].each do |field, label| %>
+        <div>
+          <%= form.label field, label, class: "block text-sm font-medium mb-1" %>
+          <%= form.time_field field,
+                class: "w-full px-3 py-2 rounded border text-sm",
+                style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="notebook-card mb-4 space-y-4">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">チケット・座席</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <%= form.label :ticket_price, "チケット代（円）", class: "block text-sm font-medium mb-1" %>
+        <%= form.number_field :ticket_price, min: 0, placeholder: "例：9800",
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :payment_status, "支払状況", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :payment_status,
+              Event.payment_statuses.keys.map { |s| [I18n.t("event.payment_status.#{s}"), s] },
+              {},
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :seat, "座席", class: "block text-sm font-medium mb-1" %>
+        <%= form.text_field :seat, placeholder: "例：A列 5番",
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="notebook-card mb-4 space-y-4">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">遠征・交通</h2>
+
+    <div class="flex items-center gap-3">
+      <%= form.label :expedition, class: "flex items-center gap-2 text-sm cursor-pointer" do %>
+        <%= form.check_box :expedition, class: "rounded" %>
+        遠征あり
+      <% end %>
+    </div>
+
+    <div>
+      <%= form.label :transport, "交通手段", class: "block text-sm font-medium mb-1" %>
+      <%= form.select :transport,
+            [["なし", "none"], ["電車", "train"], ["バス", "bus"], ["車", "car"], ["飛行機", "plane"], ["その他", "other_transport"]],
+            {},
+            class: "w-full px-3 py-2 rounded border text-sm",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+  </div>
+
+  <div class="notebook-card mb-6 space-y-4">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">メモ・公開設定</h2>
+
+    <div>
+      <%= form.label :note, "メモ", class: "block text-sm font-medium mb-1" %>
+      <%= form.text_area :note, rows: 4, placeholder: "感想・メモ・セトリなど",
+            class: "w-full px-3 py-2 rounded border text-sm",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+
+    <div>
+      <%= form.label :visibility, "公開設定", class: "block text-sm font-medium mb-1" %>
+      <%= form.select :visibility,
+            [["非公開（自分のみ）", "private_only"], ["公開", "public_visible"]],
+            {},
+            class: "w-full px-3 py-2 rounded border text-sm",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+  </div>
+
+  <div class="flex gap-3">
+    <%= form.submit event.persisted? ? "更新する" : "登録する",
+          class: "btn-primary cursor-pointer" %>
+    <%= link_to "キャンセル", events_path, class: "tab-seal" %>
+  </div>
+<% end %>

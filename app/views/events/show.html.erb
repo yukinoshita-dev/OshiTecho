@@ -1,0 +1,96 @@
+<%= content_for :title, "#{@event.title} | 推し手帳" %>
+
+<div class="max-w-2xl mx-auto">
+  <div class="notebook-card mb-4 relative overflow-hidden">
+    <div class="absolute left-0 top-0 bottom-0 w-2 rounded-l" style="background-color: <%= @event.oshi.color %>;"></div>
+    <div class="ml-4">
+      <div class="flex items-center gap-2 flex-wrap mb-2">
+        <span class="stamp-badge"><%= t("event.event_type.#{@event.event_type}") %></span>
+        <% if @event.public_visible? %>
+          <span class="stamp-badge">公開</span>
+        <% end %>
+        <% if @event.expedition? %>
+          <span class="stamp-badge">遠征</span>
+        <% end %>
+      </div>
+
+      <h1 class="text-2xl font-bold mb-1" style="font-family: var(--font-heading);"><%= @event.title %></h1>
+
+      <div class="flex items-center gap-1 text-sm text-muted mb-1">
+        <% if @event.oshi.image.attached? %>
+          <%= image_tag @event.oshi.image, class: "w-5 h-5 rounded-full object-cover inline" %>
+        <% end %>
+        <%= @event.oshi.name %>
+      </div>
+    </div>
+  </div>
+
+  <div class="notebook-card mb-4">
+    <h2 class="font-bold text-sm text-muted mb-3 ruled-line">日時・場所</h2>
+    <dl class="space-y-2 text-sm">
+      <div class="flex gap-4">
+        <dt class="text-muted w-20 shrink-0">開催日</dt>
+        <dd><%= @event.event_date.strftime("%Y年%m月%d日（%a）") %></dd>
+      </div>
+      <% if @event.open_time || @event.start_time || @event.end_time %>
+        <div class="flex gap-4">
+          <dt class="text-muted w-20 shrink-0">時刻</dt>
+          <dd class="flex gap-3 flex-wrap">
+            <% [[@event.open_time, "開場"], [@event.start_time, "開演"], [@event.end_time, "終演"]].each do |time, label| %>
+              <% if time %>
+                <span><%= label %> <%= time.strftime("%H:%M") %></span>
+              <% end %>
+            <% end %>
+          </dd>
+        </div>
+      <% end %>
+      <% if @event.venue.present? %>
+        <div class="flex gap-4">
+          <dt class="text-muted w-20 shrink-0">会場</dt>
+          <dd><%= @event.venue %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+
+  <div class="notebook-card mb-4">
+    <h2 class="font-bold text-sm text-muted mb-3 ruled-line">チケット・交通</h2>
+    <dl class="space-y-2 text-sm">
+      <% if @event.ticket_price %>
+        <div class="flex gap-4">
+          <dt class="text-muted w-20 shrink-0">チケット代</dt>
+          <dd>¥<%= number_with_delimiter(@event.ticket_price) %>
+            <span class="stamp-badge ml-1 text-xs"><%= t("event.payment_status.#{@event.payment_status}") %></span>
+          </dd>
+        </div>
+      <% end %>
+      <% if @event.seat.present? %>
+        <div class="flex gap-4">
+          <dt class="text-muted w-20 shrink-0">座席</dt>
+          <dd><%= @event.seat %></dd>
+        </div>
+      <% end %>
+      <% unless @event.none? %>
+        <div class="flex gap-4">
+          <dt class="text-muted w-20 shrink-0">交通手段</dt>
+          <dd><%= [["none","なし"],["train","電車"],["bus","バス"],["car","車"],["plane","飛行機"],["other_transport","その他"]].to_h[@event.transport] %></dd>
+        </div>
+      <% end %>
+    </dl>
+  </div>
+
+  <% if @event.note.present? %>
+    <div class="notebook-card mb-4">
+      <h2 class="font-bold text-sm text-muted mb-2 ruled-line">メモ</h2>
+      <p class="text-sm leading-relaxed"><%= simple_format(@event.note) %></p>
+    </div>
+  <% end %>
+
+  <div class="flex gap-3">
+    <%= link_to "編集", edit_event_path(@event), class: "btn-primary" %>
+    <%= link_to "一覧に戻る", events_path, class: "tab-seal" %>
+    <%= button_to "削除", event_path(@event), method: :delete,
+          data: { turbo_confirm: "#{@event.title} を削除してよいですか？" },
+          class: "tab-seal cursor-pointer ml-auto" %>
+  </div>
+</div>

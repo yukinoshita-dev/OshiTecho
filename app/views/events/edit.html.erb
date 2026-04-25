@@ -1,0 +1,5 @@
+<%= content_for :title, "イベント編集 | 推し手帳" %>
+
+<h1 class="text-2xl font-bold mb-6" style="font-family: var(--font-heading);"><%= @event.title %> を編集</h1>
+
+<%= render "form", event: @event %>
