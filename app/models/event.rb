@@ -1,6 +1,7 @@
 class Event < ApplicationRecord
   belongs_to :user
   belongs_to :oshi
+  has_many :participations, class_name: "EventParticipation", dependent: :destroy
 
   enum :event_type, { live: 0, handshake: 1, talk: 2, online: 3, release: 4, other: 5 }
   enum :payment_status, { unpaid: 0, paid: 1, refunded: 2 }

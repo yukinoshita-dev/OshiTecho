@@ -1,0 +1,4 @@
+<span id="participation-count-<%= event.id %>" class="text-xs text-muted">
+  参加予定 <%= event.participations.count { |p| p.planning? } %>人・
+  参加済み <%= event.participations.count { |p| p.attended? } %>人
+</span>

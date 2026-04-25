@@ -1,0 +1,6 @@
+<%= turbo_stream.replace "participation-#{@event.id}" do %>
+  <%= render "participation_button", event: @event.tap { |e| e.participations.reload } %>
+<% end %>
+<%= turbo_stream.replace "participation-count-#{@event.id}" do %>
+  <%= render "participation_count", event: @event %>
+<% end %>
