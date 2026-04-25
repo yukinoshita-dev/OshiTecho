@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resource :theme, only: [:update]
   resource :registration, only: [:new, :create]
+  resource :profile, only: [:edit, :update]
+  get "users/:username", to: "profiles#show", as: :user_profile
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

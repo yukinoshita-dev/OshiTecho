@@ -30,7 +30,14 @@
 
       <%# ユーザーメニュー %>
       <div class="flex items-center gap-2">
-        <span class="text-muted text-sm hidden sm:inline"><%= Current.user.email_address %></span>
+        <%= link_to edit_profile_path, class: "tab-seal text-xs" do %>
+          <% if Current.user.avatar.attached? %>
+            <%= image_tag Current.user.avatar, class: "w-5 h-5 rounded-full inline object-cover" %>
+          <% else %>
+            👤
+          <% end %>
+          <span class="hidden sm:inline ml-1"><%= Current.user.display_name.presence || Current.user.email_address %></span>
+        <% end %>
         <%= button_to "ログアウト", session_path, method: :delete,
               class: "tab-seal text-xs cursor-pointer" %>
       </div>

@@ -1,0 +1,69 @@
+<%= content_for :title, "プロフィール編集 | 推し手帳" %>
+
+<div class="max-w-lg mx-auto">
+  <h1 class="text-2xl font-bold mb-6 ruled-line" style="font-family: var(--font-heading);">プロフィール編集</h1>
+
+  <%= form_with model: @user, url: profile_path, method: :patch, multipart: true do |form| %>
+    <% if @user.errors.any? %>
+      <div class="mb-4 p-3 rounded text-sm" style="background: var(--color-badge-bg); color: var(--color-badge-text);">
+        <% @user.errors.full_messages.each do |msg| %>
+          <p>・<%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%# アバター %>
+    <div class="notebook-card mb-4 flex items-center gap-4">
+      <% if @user.avatar.attached? %>
+        <%= image_tag @user.avatar, class: "w-16 h-16 rounded-full object-cover", style: "border: 2px solid var(--color-border);" %>
+      <% else %>
+        <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl"
+             style="background: var(--color-badge-bg); border: 2px solid var(--color-border);">
+          👤
+        </div>
+      <% end %>
+      <div class="flex-1">
+        <%= form.label :avatar, "アバター画像", class: "block text-sm font-medium mb-1" %>
+        <%= form.file_field :avatar, accept: "image/*",
+              class: "text-sm w-full",
+              style: "color: var(--color-text-muted);" %>
+        <p class="text-xs mt-1" style="color: var(--color-text-muted);">JPG/PNG/GIF・2MB以内</p>
+      </div>
+    </div>
+
+    <div class="notebook-card space-y-4">
+      <div>
+        <%= form.label :display_name, "表示名", class: "block text-sm font-medium mb-1" %>
+        <%= form.text_field :display_name,
+              placeholder: "推し活ネーム（最大50文字）",
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :username, "ユーザー名", class: "block text-sm font-medium mb-1" %>
+        <div class="flex items-center gap-2">
+          <span class="text-muted text-sm">@</span>
+          <%= form.text_field :username,
+                placeholder: "半角英数字・アンダースコア（最大30文字）",
+                class: "flex-1 px-3 py-2 rounded border text-sm",
+                style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+        </div>
+        <p class="text-xs mt-1" style="color: var(--color-text-muted);">設定するとプロフィールページが公開されます</p>
+      </div>
+
+      <div>
+        <%= form.label :bio, "自己紹介", class: "block text-sm font-medium mb-1" %>
+        <%= form.text_area :bio,
+              rows: 4,
+              placeholder: "推し活について教えてください（最大200文字）",
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div class="flex justify-end">
+        <%= form.submit "保存する", class: "btn-primary cursor-pointer" %>
+      </div>
+    </div>
+  <% end %>
+</div>
