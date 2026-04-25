@@ -1,6 +1,125 @@
 <%= content_for :title, "ダッシュボード | 推し手帳" %>
 
-<div class="notebook-card text-center py-12">
-  <p class="text-3xl mb-3" style="font-family: var(--font-heading);">📔 推し手帳</p>
-  <p class="text-muted">あなたの推し活を、ここに記録しよう。</p>
+<%# ウェルカム %>
+<div class="mb-6">
+  <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);">
+    おかえり、<%= Current.user.display_name.presence || Current.user.email_address.split("@").first %> さん 👋
+  </h1>
+  <p class="text-muted text-sm mt-1"><%= Date.current.strftime("%Y年%m月%d日") %></p>
+</div>
+
+<%# 今月の統計ウィジェット %>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+  <div class="notebook-card text-center">
+    <p class="text-3xl font-bold text-primary"><%= @month_event_count %></p>
+    <p class="text-xs text-muted mt-1">今月のイベント</p>
+  </div>
+  <div class="notebook-card text-center">
+    <p class="text-2xl font-bold text-primary">¥<%= number_with_delimiter(@month_total_cost) %></p>
+    <p class="text-xs text-muted mt-1">今月の出費</p>
+  </div>
+  <div class="notebook-card text-center">
+    <p class="text-3xl font-bold text-primary"><%= Current.user.oshis.count %></p>
+    <p class="text-xs text-muted mt-1">推しの数</p>
+  </div>
+  <div class="notebook-card text-center">
+    <p class="text-3xl font-bold text-primary"><%= Current.user.events.count %></p>
+    <p class="text-xs text-muted mt-1">累計イベント</p>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <%# 近日開催 %>
+  <div class="notebook-card">
+    <h2 class="font-bold ruled-line mb-3" style="font-family: var(--font-heading);">📅 近日開催（7日以内）</h2>
+    <% if @upcoming_events.empty? %>
+      <p class="text-muted text-sm text-center py-4">近日開催のイベントはありません</p>
+    <% else %>
+      <ul class="space-y-3">
+        <% @upcoming_events.each do |event| %>
+          <li class="flex items-start gap-2">
+            <div class="w-1 h-full rounded shrink-0 mt-1" style="background-color: <%= event.oshi.color %>; min-height: 32px;"></div>
+            <div class="flex-1 min-w-0">
+              <%= link_to event.title, event_path(event), class: "font-medium text-sm hover:underline truncate block" %>
+              <p class="text-xs text-muted">
+                <%= event.event_date.strftime("%m月%d日") %>
+                <% if event.start_time %> <%= event.start_time.strftime("%H:%M") %>開演<% end %>
+                · <%= event.oshi.name %>
+              </p>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+      <%= link_to "すべて見る →", events_path, class: "text-xs text-primary mt-3 block hover:underline" %>
+    <% end %>
+  </div>
+
+  <%# 最近のイベント %>
+  <div class="notebook-card">
+    <h2 class="font-bold ruled-line mb-3" style="font-family: var(--font-heading);">📖 最近のイベント</h2>
+    <% if @recent_events.empty? %>
+      <p class="text-muted text-sm text-center py-4">まだイベントの記録がありません</p>
+    <% else %>
+      <ul class="space-y-3">
+        <% @recent_events.each do |event| %>
+          <li class="flex items-start gap-2">
+            <div class="w-1 rounded shrink-0 mt-1" style="background-color: <%= event.oshi.color %>; min-height: 32px;"></div>
+            <div class="flex-1 min-w-0">
+              <%= link_to event.title, event_path(event), class: "font-medium text-sm hover:underline truncate block" %>
+              <p class="text-xs text-muted">
+                <%= event.event_date.strftime("%m月%d日") %> · <%= event.oshi.name %>
+                <% if event.ticket_price && event.ticket_price > 0 %>
+                  · ¥<%= number_with_delimiter(event.ticket_price) %>
+                <% end %>
+              </p>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+      <%= link_to "すべて見る →", events_path(past: 1), class: "text-xs text-primary mt-3 block hover:underline" %>
+    <% end %>
+  </div>
+
+  <%# 推し一覧 %>
+  <div class="notebook-card">
+    <h2 class="font-bold ruled-line mb-3" style="font-family: var(--font-heading);">🌟 推し</h2>
+    <% if @oshis.empty? %>
+      <p class="text-muted text-sm text-center py-4">推しを登録しよう</p>
+      <%= link_to "＋ 推しを追加", new_oshi_path, class: "btn-primary text-sm block text-center mt-2" %>
+    <% else %>
+      <div class="flex flex-wrap gap-2">
+        <% @oshis.each do |oshi| %>
+          <%= link_to oshi_path(oshi), class: "flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-opacity hover:opacity-80",
+                style: "background-color: #{oshi.color}22; border: 1px solid #{oshi.color}; color: var(--color-text);" do %>
+            <% if oshi.image.attached? %>
+              <%= image_tag oshi.image, class: "w-5 h-5 rounded-full object-cover" %>
+            <% else %>
+              <span>🌟</span>
+            <% end %>
+            <%= oshi.name %>
+          <% end %>
+        <% end %>
+      </div>
+      <%= link_to "推し一覧を見る →", oshis_path, class: "text-xs text-primary mt-3 block hover:underline" %>
+    <% end %>
+  </div>
+
+  <%# 推し別統計 %>
+  <% if @oshi_stats.any? %>
+    <div class="notebook-card">
+      <h2 class="font-bold ruled-line mb-3" style="font-family: var(--font-heading);">📊 推し別統計</h2>
+      <ul class="space-y-3">
+        <% @oshi_stats.each do |stat| %>
+          <li class="flex items-center gap-3">
+            <div class="w-2 h-2 rounded-full shrink-0" style="background-color: <%= stat[:oshi].color %>;"></div>
+            <span class="flex-1 text-sm"><%= stat[:oshi].name %></span>
+            <span class="text-xs text-muted"><%= stat[:event_count] %>回</span>
+            <% if stat[:total_cost] > 0 %>
+              <span class="stamp-badge text-xs">¥<%= number_with_delimiter(stat[:total_cost]) %></span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 </div>
