@@ -80,6 +80,37 @@
   </div>
 </section>
 
+<%# 公開イベントタイムライン %>
+<% if @public_events.any? %>
+  <section class="mt-12">
+    <h2 class="text-xl font-bold text-center mb-6" style="font-family: var(--font-heading);">
+      📅 みんなのイベント
+    </h2>
+    <div class="space-y-3">
+      <% @public_events.each do |event| %>
+        <div class="notebook-card flex items-start gap-3 text-sm">
+          <div class="shrink-0 text-center min-w-[52px]">
+            <p class="text-xs" style="color: var(--color-text-muted);"><%= event.event_date.strftime("%-m/%-d") %></p>
+            <p class="text-xs font-bold" style="color: var(--color-primary);">(<%= %w[日 月 火 水 木 金 土][event.event_date.wday] %>)</p>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-medium truncate"><%= event.title %></p>
+            <% if event.oshi.present? %>
+              <p class="text-xs truncate" style="color: var(--color-text-muted);">
+                🌟 <%= event.oshi.name %>
+                <% if event.venue.present? %>／📍 <%= event.venue %><% end %>
+              </p>
+            <% end %>
+          </div>
+          <div class="shrink-0">
+            <span class="stamp-badge text-xs"><%= event.user.display_name.presence || event.user.email_address.split("@").first %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
 <%# CTA %>
 <section class="mt-12 text-center pb-12">
   <div class="notebook-card inline-block px-8 py-6 max-w-lg">
