@@ -31,6 +31,9 @@
         <% end %>
       </div>
 
+      <%# 通知ベル %>
+      <%= render "shared/notification_badge" %>
+
       <%# ユーザーメニュー %>
       <div class="flex items-center gap-2">
         <%= link_to edit_profile_path, class: "tab-seal text-xs" do %>

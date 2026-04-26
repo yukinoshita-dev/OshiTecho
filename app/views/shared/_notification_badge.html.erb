@@ -1,0 +1,11 @@
+<%= turbo_frame_tag "notification-badge-frame" do %>
+  <%= link_to notifications_path, class: "relative tab-seal text-xs" do %>
+    🔔
+    <% unread_count = Current.user.notifications.unread.count %>
+    <% if unread_count > 0 %>
+      <span class="absolute -top-1 -right-1 min-w-[1.1rem] h-[1.1rem] rounded-full bg-red-500 text-white text-[0.6rem] flex items-center justify-center leading-none px-0.5">
+        <%= unread_count > 99 ? "99+" : unread_count %>
+      </span>
+    <% end %>
+  <% end %>
+<% end %>

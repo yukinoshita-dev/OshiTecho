@@ -3,6 +3,7 @@ class FollowsController < ApplicationController
 
   def create
     Current.user.follow(@target_user)
+    @target_user.notifications.create!(actor: Current.user, action: "follow")
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_back fallback_location: user_profile_path(@target_user.username) }

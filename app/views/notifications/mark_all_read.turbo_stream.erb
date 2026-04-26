@@ -1,0 +1,22 @@
+<%= turbo_stream.replace "notification-badge-frame" do %>
+  <%= render "shared/notification_badge" %>
+<% end %>
+<%= turbo_stream.replace "notifications-list" do %>
+  <div id="notifications-list" class="space-y-2">
+    <% @notifications.each do |notification| %>
+      <div class="notebook-card flex items-start gap-3 opacity-60">
+        <div class="shrink-0 mt-1">
+          <% if notification.actor&.avatar&.attached? %>
+            <%= image_tag notification.actor.avatar, class: "w-9 h-9 rounded-full object-cover" %>
+          <% else %>
+            <span class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-lg block">👤</span>
+          <% end %>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm"><%= notification.message %></p>
+          <p class="text-xs text-gray-400 mt-1"><%= time_ago_in_words(notification.created_at) %>前</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

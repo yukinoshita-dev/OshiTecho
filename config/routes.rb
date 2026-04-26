@@ -10,6 +10,11 @@ Rails.application.routes.draw do
   resource :calendar, only: [:show] do
     get :events, on: :member
   end
+  resources :notifications, only: [:index] do
+    collection do
+      patch :mark_all_read
+    end
+  end
   resources :events do
     resources :participations, only: [:create, :destroy],
               controller: "event_participations"
