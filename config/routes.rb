@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   resources :oshis
   resources :goods
   resources :activity_logs
+  resource :calendar, only: [:show] do
+    get :events, on: :member
+  end
   resources :events do
     resources :participations, only: [:create, :destroy],
               controller: "event_participations"
