@@ -19,6 +19,7 @@ class Notification < ApplicationRecord
     case action
     when "follow"          then "#{actor_name} さんにフォローされました"
     when "participation"   then "#{actor_name} さんがあなたのイベントに参加表明しました"
+    when "event_reminder"  then "明日「#{notifiable&.title}」があります"
     else action
     end
   end
