@@ -40,9 +40,17 @@
 
 <%# テーマデモ %>
 <section class="mt-12">
-  <h2 class="text-xl font-bold text-center mb-6" style="font-family: var(--font-heading);">
+  <h2 class="text-xl font-bold text-center mb-3" style="font-family: var(--font-heading);">
     4つのテーマから選べます
   </h2>
+  <p class="text-center text-sm mb-5" style="color: var(--color-text-muted);">
+    今すぐ試してみよう →
+    <% [["classic", "🪵"], ["girly", "🌸"], ["natural", "🌿"], ["cool", "🌙"]].each do |theme, icon| %>
+      <button data-action="click->theme#change" data-theme="<%= theme %>"
+              class="ml-2 w-8 h-8 rounded-full border-2 border-transparent hover:scale-110 transition-all text-sm"
+              title="<%= theme %>"><%= icon %></button>
+    <% end %>
+  </p>
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
     <% [
       ["classic",  "🪵", "Classic",  "#faf8f2", "#f5f0e8", "#8b6344", "#d4b896"],

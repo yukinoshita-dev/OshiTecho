@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html data-controller="theme" data-theme="<%= current_user&.theme || "classic" %>">
+<html data-controller="theme"
+      data-theme="<%= current_user&.theme || "classic" %>"
+      data-theme-authenticated-value="<%= authenticated? %>">
   <head>
     <title><%= content_for(:title) || "推し手帳" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
