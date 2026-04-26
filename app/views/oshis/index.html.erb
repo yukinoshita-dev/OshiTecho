@@ -1,8 +1,29 @@
 <%= content_for :title, "推し一覧 | 推し手帳" %>
 
-<div class="flex items-center justify-between mb-6">
+<div class="flex items-center justify-between mb-4">
   <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);">推し一覧</h1>
   <%= link_to "＋ 推しを追加", new_oshi_path, class: "btn-primary" %>
+</div>
+
+<%# フィルターバー %>
+<div class="notebook-card mb-5 flex flex-wrap items-center gap-3 text-sm">
+  <%# カテゴリフィルター %>
+  <div class="flex items-center gap-1 flex-wrap">
+    <%= link_to "すべて", oshis_path(sort: @sort),
+          class: "tab-seal #{@category_filter.blank? ? "opacity-100 font-bold" : "opacity-60"}" %>
+    <% Oshi::CATEGORIES.each do |cat| %>
+      <%= link_to cat, oshis_path(category: cat, sort: @sort),
+            class: "tab-seal #{@category_filter == cat ? "opacity-100 font-bold" : "opacity-60"}" %>
+    <% end %>
+  </div>
+
+  <div class="ml-auto flex items-center gap-2" style="color: var(--color-text-muted);">
+    <span class="text-xs">並び替え:</span>
+    <%= link_to "登録順", oshis_path(category: @category_filter),
+          class: "tab-seal text-xs #{@sort != "kana" ? "font-bold" : "opacity-60"}" %>
+    <%= link_to "50音順", oshis_path(category: @category_filter, sort: "kana"),
+          class: "tab-seal text-xs #{@sort == "kana" ? "font-bold" : "opacity-60"}" %>
+  </div>
 </div>
 
 <% if @oshis.empty? %>
@@ -33,6 +54,9 @@
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
               <h2 class="font-bold text-base truncate"><%= oshi.name %></h2>
+              <% if oshi.category.present? %>
+                <span class="stamp-badge text-xs"><%= oshi.category %></span>
+              <% end %>
               <% if oshi.graduated? %>
                 <span class="stamp-badge text-xs">卒業</span>
               <% elsif oshi.hiatus? %>

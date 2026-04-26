@@ -2,7 +2,12 @@ class OshisController < ApplicationController
   before_action :set_oshi, only: [:show, :edit, :update, :destroy]
 
   def index
-    @oshis = Current.user.oshis.ordered.with_attached_image
+    @category_filter = params[:category]
+    @sort = params[:sort]
+
+    @oshis = Current.user.oshis.with_attached_image
+    @oshis = @oshis.by_category(@category_filter)
+    @oshis = @sort == "kana" ? @oshis.by_kana : @oshis.ordered
   end
 
   def show
@@ -47,7 +52,7 @@ class OshisController < ApplicationController
 
   def oshi_params
     params.require(:oshi).permit(
-      :name, :color, :hashtag, :note, :status, :image,
+      :name, :kana, :category, :color, :hashtag, :note, :status, :image,
       :twitter_url, :instagram_url, :youtube_url, :tiktok_url,
       anniversaries_attributes: [:id, :name, :date, :yearly, :_destroy]
     )

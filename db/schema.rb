@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_25_200609) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_26_185505) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -97,10 +97,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_25_200609) do
   end
 
   create_table "oshis", force: :cascade do |t|
+    t.string "category"
     t.string "color", default: "#ff69b4"
     t.datetime "created_at", null: false
     t.string "hashtag"
     t.string "instagram_url"
+    t.string "kana"
     t.string "name", null: false
     t.text "note"
     t.integer "position", default: 0, null: false

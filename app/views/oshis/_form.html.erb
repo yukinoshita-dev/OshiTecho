@@ -19,6 +19,21 @@
       </div>
 
       <div>
+        <%= form.label :kana, "よみがな（50音順並び替え用）", class: "block text-sm font-medium mb-1" %>
+        <%= form.text_field :kana, placeholder: "例：たなかはなこ",
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :category, "カテゴリ", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :category, Oshi::CATEGORIES,
+              { include_blank: "選択してください" },
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
         <%= form.label :status, "ステータス", class: "block text-sm font-medium mb-1" %>
         <%= form.select :status, Oshi.statuses.keys.map { |s| [I18n.t("oshi.status.#{s}", default: s), s] },
               {},
