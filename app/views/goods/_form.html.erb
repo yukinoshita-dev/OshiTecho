@@ -1,0 +1,80 @@
+<%= form_with model: good, multipart: true do |form| %>
+  <% if good.errors.any? %>
+    <div class="mb-4 p-3 rounded text-sm" style="background: var(--color-badge-bg); color: var(--color-badge-text);">
+      <% good.errors.full_messages.each do |msg| %>
+        <p>・<%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="notebook-card mb-4 space-y-4">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">グッズ情報</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="sm:col-span-2">
+        <%= form.label :name, "グッズ名 *", class: "block text-sm font-medium mb-1" %>
+        <%= form.text_field :name, required: true, placeholder: "例：アクリルスタンド",
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :category, "カテゴリ", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :category, Good::CATEGORIES,
+              { include_blank: "選択してください" },
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :oshi_id, "推し", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :oshi_id,
+              @oshis.map { |o| [o.name, o.id] },
+              { include_blank: "なし" },
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :purchase_date, "購入日", class: "block text-sm font-medium mb-1" %>
+        <%= form.date_field :purchase_date,
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :price, "金額（円）", class: "block text-sm font-medium mb-1" %>
+        <div class="flex items-center gap-1">
+          <span class="text-sm" style="color: var(--color-text-muted);">¥</span>
+          <%= form.number_field :price, min: 0, placeholder: "0",
+                class: "flex-1 px-3 py-2 rounded border text-sm",
+                style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :note, "メモ", class: "block text-sm font-medium mb-1" %>
+      <%= form.text_area :note, rows: 3, placeholder: "購入場所・状態など自由に",
+            class: "w-full px-3 py-2 rounded border text-sm",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+  </div>
+
+  <div class="notebook-card mb-4">
+    <h2 class="font-bold ruled-line mb-3" style="font-family: var(--font-heading);">画像</h2>
+    <div class="flex items-center gap-4">
+      <% if good.image.attached? %>
+        <%= image_tag good.image, class: "w-16 h-16 rounded object-cover", style: "border: 1px solid var(--color-border);" %>
+      <% end %>
+      <%= form.file_field :image, accept: "image/*",
+            class: "text-sm", style: "color: var(--color-text-muted);" %>
+    </div>
+  </div>
+
+  <div class="flex gap-3">
+    <%= form.submit good.persisted? ? "更新する" : "登録する",
+          class: "btn-primary cursor-pointer" %>
+    <%= link_to "キャンセル", goods_path, class: "tab-seal" %>
+  </div>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_26_185505) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_26_185922) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,6 +86,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_26_185505) do
     t.index ["follower_id"], name: "index_follows_on_follower_id"
   end
 
+  create_table "goods", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.text "note"
+    t.bigint "oshi_id"
+    t.integer "price", default: 0
+    t.date "purchase_date"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["oshi_id"], name: "index_goods_on_oshi_id"
+    t.index ["user_id", "purchase_date"], name: "index_goods_on_user_id_and_purchase_date"
+    t.index ["user_id"], name: "index_goods_on_user_id"
+  end
+
   create_table "oshi_anniversaries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date", null: false
@@ -145,6 +160,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_26_185505) do
   add_foreign_key "events", "users"
   add_foreign_key "follows", "users", column: "followed_id"
   add_foreign_key "follows", "users", column: "follower_id"
+  add_foreign_key "goods", "oshis"
+  add_foreign_key "goods", "users"
   add_foreign_key "oshi_anniversaries", "oshis"
   add_foreign_key "oshis", "users"
   add_foreign_key "sessions", "users"

@@ -1,0 +1,106 @@
+<%= content_for :title, "グッズ管理 | 推し手帳" %>
+
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);">🧸 グッズ管理</h1>
+  <%= link_to "＋ グッズを追加", new_good_path, class: "btn-primary" %>
+</div>
+
+<%# フィルターバー %>
+<div class="notebook-card mb-5 space-y-3 text-sm">
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="text-xs font-medium" style="color: var(--color-text-muted);">カテゴリ:</span>
+    <%= link_to "すべて", goods_path(oshi_id: @oshi_filter, ym: @ym_filter),
+          class: "tab-seal #{@category_filter.blank? ? "font-bold" : "opacity-60"}" %>
+    <% Good::CATEGORIES.each do |cat| %>
+      <%= link_to cat, goods_path(oshi_id: @oshi_filter, category: cat, ym: @ym_filter),
+            class: "tab-seal #{@category_filter == cat ? "font-bold" : "opacity-60"}" %>
+    <% end %>
+  </div>
+
+  <% if @oshis.any? %>
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-xs font-medium" style="color: var(--color-text-muted);">推し:</span>
+      <%= link_to "すべて", goods_path(category: @category_filter, ym: @ym_filter),
+            class: "tab-seal #{@oshi_filter.blank? ? "font-bold" : "opacity-60"}" %>
+      <% @oshis.each do |oshi| %>
+        <%= link_to oshi.name, goods_path(oshi_id: oshi.id, category: @category_filter, ym: @ym_filter),
+              class: "tab-seal #{@oshi_filter == oshi.id.to_s ? "font-bold" : "opacity-60"}" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @monthly_summary.any? %>
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-xs font-medium" style="color: var(--color-text-muted);">購入年月:</span>
+      <%= link_to "すべて", goods_path(oshi_id: @oshi_filter, category: @category_filter),
+            class: "tab-seal #{@ym_filter.blank? ? "font-bold" : "opacity-60"}" %>
+      <% @monthly_summary.keys.each do |ym| %>
+        <%= link_to ym, goods_path(oshi_id: @oshi_filter, category: @category_filter, ym: ym),
+              class: "tab-seal text-xs #{@ym_filter == ym ? "font-bold" : "opacity-60"}" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<%# 集計 %>
+<div class="notebook-card mb-5 flex items-center justify-between text-sm">
+  <span style="color: var(--color-text-muted);"><%= @goods.count %> 件</span>
+  <span class="font-bold">合計: ¥<%= number_with_delimiter(@total_price) %></span>
+</div>
+
+<% if @goods.empty? %>
+  <div class="notebook-card text-center py-12">
+    <p class="text-4xl mb-3">🧸</p>
+    <p class="font-medium mb-1">グッズがまだ登録されていません</p>
+    <p class="text-sm mb-4" style="color: var(--color-text-muted);">推しのグッズを記録しよう</p>
+    <%= link_to "グッズを追加する", new_good_path, class: "btn-primary" %>
+  </div>
+<% else %>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <% @goods.each do |good| %>
+      <div class="notebook-card space-y-2 text-sm">
+        <div class="flex items-start gap-3">
+          <% if good.image.attached? %>
+            <%= image_tag good.image, class: "w-14 h-14 rounded object-cover shrink-0",
+                  style: "border: 1px solid var(--color-border);" %>
+          <% else %>
+            <div class="w-14 h-14 rounded flex items-center justify-center text-2xl shrink-0"
+                 style="background: var(--color-surface); border: 1px solid var(--color-border);">
+              🧸
+            </div>
+          <% end %>
+          <div class="flex-1 min-w-0">
+            <p class="font-bold truncate"><%= good.name %></p>
+            <div class="flex flex-wrap gap-1 mt-1">
+              <% if good.category.present? %>
+                <span class="stamp-badge text-xs"><%= good.category %></span>
+              <% end %>
+              <% if good.oshi.present? %>
+                <span class="stamp-badge text-xs">🌟 <%= good.oshi.name %></span>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between" style="border-top: 1px solid var(--color-border); padding-top: 0.5rem;">
+          <div>
+            <% if good.purchase_date.present? %>
+              <p class="text-xs" style="color: var(--color-text-muted);"><%= good.purchase_date.strftime("%Y年%-m月%-d日") %></p>
+            <% end %>
+            <% if good.price.present? && good.price > 0 %>
+              <p class="font-bold" style="color: var(--color-primary);">¥<%= number_with_delimiter(good.price) %></p>
+            <% end %>
+          </div>
+          <div class="flex gap-2">
+            <%= link_to "編集", edit_good_path(good), class: "tab-seal text-xs" %>
+            <%= button_to "削除", good_path(good), method: :delete,
+                  data: { turbo_confirm: "#{good.name} を削除してよいですか？" },
+                  class: "tab-seal text-xs cursor-pointer" %>
+          </div>
+        </div>
+        <% if good.note.present? %>
+          <p class="text-xs line-clamp-2" style="color: var(--color-text-muted);"><%= good.note %></p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
