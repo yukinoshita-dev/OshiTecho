@@ -1,0 +1,90 @@
+<%= content_for :title, "#{@log.title} | 推し手帳" %>
+
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);"><%= @log.title %></h1>
+  <div class="flex gap-2">
+    <%= link_to "編集", edit_activity_log_path(@log), class: "tab-seal text-sm" %>
+    <%= button_to "削除", activity_log_path(@log), method: :delete,
+          data: { turbo_confirm: "このログを削除してよいですか？" },
+          class: "tab-seal text-sm cursor-pointer" %>
+  </div>
+</div>
+
+<div class="space-y-4">
+  <%# メタ情報 %>
+  <div class="notebook-card flex flex-wrap gap-3 text-sm items-center">
+    <% if @log.rating > 0 %>
+      <span class="text-yellow-500"><%= "★" * @log.rating %><%= "☆" * (5 - @log.rating) %></span>
+    <% end %>
+    <% if @log.oshi.present? %>
+      <span class="stamp-badge">🌟 <%= @log.oshi.name %></span>
+    <% end %>
+    <% if @log.event.present? %>
+      <span class="stamp-badge">🎫 <%= @log.event.title %></span>
+    <% end %>
+    <% if @log.public_visible? %>
+      <span class="stamp-badge">公開</span>
+    <% end %>
+    <span style="color: var(--color-text-muted);" class="text-xs ml-auto"><%= @log.created_at.strftime("%Y年%-m月%-d日") %></span>
+  </div>
+
+  <%# 画像 %>
+  <% if @log.images.attached? %>
+    <div class="flex flex-wrap gap-2">
+      <% @log.images.each do |img| %>
+        <%= image_tag img, class: "w-32 h-32 object-cover rounded", style: "border: 1px solid var(--color-border);" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# 本文 %>
+  <% if @log.body.present? %>
+    <div class="notebook-card prose prose-sm max-w-none text-sm" style="color: var(--color-text);">
+      <%= simple_format(@log.body) %>
+    </div>
+  <% end %>
+
+  <%# セトリ %>
+  <% if @log.setlist.present? %>
+    <div class="notebook-card">
+      <h2 class="font-bold mb-3 ruled-line" style="font-family: var(--font-heading);">🎵 セトリ</h2>
+      <ol class="list-decimal list-inside space-y-1 text-sm">
+        <% @log.setlist.split("\n").reject(&:blank?).each do |song| %>
+          <li><%= song %></li>
+        <% end %>
+      </ol>
+    </div>
+  <% end %>
+
+  <%# 費用 %>
+  <% if @log.total_cost > 0 %>
+    <div class="notebook-card text-sm">
+      <h2 class="font-bold mb-3 ruled-line" style="font-family: var(--font-heading);">💰 費用</h2>
+      <div class="space-y-2">
+        <% [["交通費", @log.transport_cost], ["宿泊費", @log.accommodation_cost], ["食費", @log.food_cost]].each do |label, amount| %>
+          <% next unless amount.to_i > 0 %>
+          <div class="flex justify-between">
+            <span style="color: var(--color-text-muted);"><%= label %></span>
+            <span>¥<%= number_with_delimiter(amount) %></span>
+          </div>
+        <% end %>
+        <div class="flex justify-between font-bold pt-2" style="border-top: 1px solid var(--color-border);">
+          <span>合計</span>
+          <span style="color: var(--color-primary);">¥<%= number_with_delimiter(@log.total_cost) %></span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%# 同行者 %>
+  <% if @log.companion_note.present? %>
+    <div class="notebook-card text-sm">
+      <span class="font-medium">👥 同行者: </span>
+      <span style="color: var(--color-text-muted);"><%= @log.companion_note %></span>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-6">
+  <%= link_to "← 一覧に戻る", activity_logs_path, class: "tab-seal" %>
+</div>

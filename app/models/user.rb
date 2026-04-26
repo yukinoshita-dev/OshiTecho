@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :oshis, dependent: :destroy
   has_many :events, dependent: :destroy
   has_many :goods, dependent: :destroy
+  has_many :activity_logs, dependent: :destroy
   has_many :event_participations, dependent: :destroy
   has_many :active_follows,  class_name: "Follow", foreign_key: :follower_id, dependent: :destroy
   has_many :passive_follows, class_name: "Follow", foreign_key: :followed_id, dependent: :destroy

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_26_185922) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_26_190239) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,6 +40,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_26_185922) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "activity_logs", force: :cascade do |t|
+    t.integer "accommodation_cost", default: 0
+    t.text "body"
+    t.string "companion_note"
+    t.datetime "created_at", null: false
+    t.bigint "event_id"
+    t.integer "food_cost", default: 0
+    t.bigint "oshi_id"
+    t.integer "rating", default: 0
+    t.text "setlist"
+    t.string "title", null: false
+    t.integer "transport_cost", default: 0
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.integer "visibility", default: 0, null: false
+    t.index ["event_id"], name: "index_activity_logs_on_event_id"
+    t.index ["oshi_id"], name: "index_activity_logs_on_oshi_id"
+    t.index ["user_id", "created_at"], name: "index_activity_logs_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_activity_logs_on_user_id"
   end
 
   create_table "event_participations", force: :cascade do |t|
@@ -154,6 +175,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_26_185922) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "activity_logs", "events"
+  add_foreign_key "activity_logs", "oshis"
+  add_foreign_key "activity_logs", "users"
   add_foreign_key "event_participations", "events"
   add_foreign_key "event_participations", "users"
   add_foreign_key "events", "oshis"

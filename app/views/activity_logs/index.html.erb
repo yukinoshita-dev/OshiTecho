@@ -1,0 +1,94 @@
+<%= content_for :title, "活動ログ | 推し手帳" %>
+
+<div class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);">📝 活動ログ</h1>
+  <%= link_to "＋ ログを追加", new_activity_log_path, class: "btn-primary" %>
+</div>
+
+<%# フィルターバー %>
+<div class="notebook-card mb-5 space-y-3 text-sm">
+  <% if @oshis.any? %>
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-xs font-medium" style="color: var(--color-text-muted);">推し:</span>
+      <%= link_to "すべて", activity_logs_path(rating: @rating_filter),
+            class: "tab-seal #{@oshi_filter.blank? ? "font-bold" : "opacity-60"}" %>
+      <% @oshis.each do |oshi| %>
+        <%= link_to oshi.name, activity_logs_path(oshi_id: oshi.id, rating: @rating_filter),
+              class: "tab-seal #{@oshi_filter == oshi.id.to_s ? "font-bold" : "opacity-60"}" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="text-xs font-medium" style="color: var(--color-text-muted);">評価:</span>
+    <%= link_to "すべて", activity_logs_path(oshi_id: @oshi_filter),
+          class: "tab-seal #{@rating_filter.blank? ? "font-bold" : "opacity-60"}" %>
+    <% ActivityLog::RATINGS.each do |r| %>
+      <%= link_to "★" * r, activity_logs_path(oshi_id: @oshi_filter, rating: r),
+            class: "tab-seal text-xs #{@rating_filter == r.to_s ? "font-bold" : "opacity-60"}" %>
+    <% end %>
+  </div>
+</div>
+
+<% if @logs.empty? %>
+  <div class="notebook-card text-center py-12">
+    <p class="text-4xl mb-3">📝</p>
+    <p class="font-medium mb-1">活動ログがまだありません</p>
+    <p class="text-sm mb-4" style="color: var(--color-text-muted);">現場の記憶を残しておこう</p>
+    <%= link_to "ログを書く", new_activity_log_path, class: "btn-primary" %>
+  </div>
+<% else %>
+  <div class="space-y-4">
+    <% @logs.each do |log| %>
+      <div class="notebook-card">
+        <div class="flex items-start gap-3">
+          <% if log.images.attached? %>
+            <%= image_tag log.images.first, class: "w-16 h-16 rounded object-cover shrink-0",
+                  style: "border: 1px solid var(--color-border);" %>
+          <% else %>
+            <div class="w-16 h-16 rounded flex items-center justify-center text-2xl shrink-0"
+                 style="background: var(--color-surface); border: 1px solid var(--color-border);">📝</div>
+          <% end %>
+
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              <h2 class="font-bold text-base truncate"><%= log.title %></h2>
+              <% if log.rating > 0 %>
+                <span class="text-xs text-yellow-500"><%= "★" * log.rating %><%= "☆" * (5 - log.rating) %></span>
+              <% end %>
+              <% if log.public_visible? %>
+                <span class="stamp-badge text-xs">公開</span>
+              <% end %>
+            </div>
+            <div class="flex flex-wrap gap-1 mb-2">
+              <% if log.oshi.present? %>
+                <span class="stamp-badge text-xs">🌟 <%= log.oshi.name %></span>
+              <% end %>
+              <% if log.event.present? %>
+                <span class="stamp-badge text-xs">🎫 <%= log.event.title %></span>
+              <% end %>
+            </div>
+            <% if log.body.present? %>
+              <p class="text-sm line-clamp-2" style="color: var(--color-text-muted);"><%= log.body.truncate(120) %></p>
+            <% end %>
+            <div class="flex items-center justify-between mt-2">
+              <p class="text-xs" style="color: var(--color-text-muted);">
+                <%= log.created_at.strftime("%Y年%-m月%-d日") %>
+                <% total = log.total_cost; if total > 0 %>
+                  ／ 合計費用 ¥<%= number_with_delimiter(total) %>
+                <% end %>
+              </p>
+              <div class="flex gap-2">
+                <%= link_to "詳細", activity_log_path(log), class: "tab-seal text-xs" %>
+                <%= link_to "編集", edit_activity_log_path(log), class: "tab-seal text-xs" %>
+                <%= button_to "削除", activity_log_path(log), method: :delete,
+                      data: { turbo_confirm: "このログを削除してよいですか？" },
+                      class: "tab-seal text-xs cursor-pointer" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

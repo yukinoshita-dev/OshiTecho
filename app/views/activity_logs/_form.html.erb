@@ -1,0 +1,114 @@
+<%= form_with model: log, multipart: true do |form| %>
+  <% if log.errors.any? %>
+    <div class="mb-4 p-3 rounded text-sm" style="background: var(--color-badge-bg); color: var(--color-badge-text);">
+      <% log.errors.full_messages.each do |msg| %>
+        <p>・<%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="notebook-card mb-4 space-y-4">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">基本情報</h2>
+
+    <div>
+      <%= form.label :title, "タイトル *", class: "block text-sm font-medium mb-1" %>
+      <%= form.text_field :title, required: true, placeholder: "例：○○ライブ 感想",
+            class: "w-full px-3 py-2 rounded border text-sm",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <%= form.label :oshi_id, "推し", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :oshi_id,
+              @oshis.map { |o| [o.name, o.id] },
+              { include_blank: "なし" },
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :event_id, "イベント", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :event_id,
+              @events.map { |e| ["#{e.event_date} #{e.title}", e.id] },
+              { include_blank: "なし" },
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :rating, "評価", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :rating,
+              [["-", 0]] + ActivityLog::RATINGS.map { |r| ["★" * r, r] },
+              {},
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+
+      <div>
+        <%= form.label :visibility, "公開設定", class: "block text-sm font-medium mb-1" %>
+        <%= form.select :visibility,
+              [["非公開", "private_only"], ["公開", "public_visible"]],
+              {},
+              class: "w-full px-3 py-2 rounded border text-sm",
+              style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :body, "本文（マークダウン対応）", class: "block text-sm font-medium mb-1" %>
+      <%= form.text_area :body, rows: 8, placeholder: "現場の感想、レポートを書こう",
+            class: "w-full px-3 py-2 rounded border text-sm font-mono",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+  </div>
+
+  <div class="notebook-card mb-4 space-y-4">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">🎵 セトリ</h2>
+    <div>
+      <%= form.label :setlist, "1行に1曲ずつ入力", class: "block text-xs mb-1",
+            style: "color: var(--color-text-muted);" %>
+      <%= form.text_area :setlist, rows: 6, placeholder: "1. オープニングSE\n2. 曲名\n3. 曲名",
+            class: "w-full px-3 py-2 rounded border text-sm",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+  </div>
+
+  <div class="notebook-card mb-4 space-y-4">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">💰 費用</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <% [[:transport_cost, "交通費"], [:accommodation_cost, "宿泊費"], [:food_cost, "食費"]].each do |field, label| %>
+        <div>
+          <%= form.label field, label, class: "block text-sm font-medium mb-1" %>
+          <div class="flex items-center gap-1">
+            <span class="text-sm" style="color: var(--color-text-muted);">¥</span>
+            <%= form.number_field field, min: 0, placeholder: "0",
+                  class: "flex-1 px-3 py-2 rounded border text-sm",
+                  style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="notebook-card mb-4 space-y-3">
+    <h2 class="font-bold ruled-line" style="font-family: var(--font-heading);">👥 同行者・画像</h2>
+    <div>
+      <%= form.label :companion_note, "同行者メモ", class: "block text-sm font-medium mb-1" %>
+      <%= form.text_field :companion_note, placeholder: "例：○○さんと参加",
+            class: "w-full px-3 py-2 rounded border text-sm",
+            style: "background: var(--color-bg); border-color: var(--color-border); color: var(--color-text);" %>
+    </div>
+    <div>
+      <%= form.label :images, "画像（複数選択可）", class: "block text-sm font-medium mb-1" %>
+      <%= form.file_field :images, multiple: true, accept: "image/*",
+            class: "text-sm", style: "color: var(--color-text-muted);" %>
+    </div>
+  </div>
+
+  <div class="flex gap-3">
+    <%= form.submit log.persisted? ? "更新する" : "保存する",
+          class: "btn-primary cursor-pointer" %>
+    <%= link_to "キャンセル", log.persisted? ? activity_log_path(log) : activity_logs_path, class: "tab-seal" %>
+  </div>
+<% end %>

@@ -2,6 +2,7 @@ class Oshi < ApplicationRecord
   belongs_to :user
   has_many :anniversaries, class_name: "OshiAnniversary", dependent: :destroy
   has_many :goods, dependent: :nullify
+  has_many :activity_logs, dependent: :nullify
   has_one_attached :image
 
   accepts_nested_attributes_for :anniversaries, allow_destroy: true, reject_if: :all_blank

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resource :profile, only: [:edit, :update]
   resources :oshis
   resources :goods
+  resources :activity_logs
   resources :events do
     resources :participations, only: [:create, :destroy],
               controller: "event_participations"
