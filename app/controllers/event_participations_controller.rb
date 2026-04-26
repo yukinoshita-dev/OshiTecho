@@ -14,6 +14,8 @@ class EventParticipationsController < ApplicationController
       )
     end
 
+    broadcast_participation_count
+
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_back fallback_location: events_path }
@@ -23,6 +25,8 @@ class EventParticipationsController < ApplicationController
   def destroy
     @participation = @event.participations.find_by!(user: Current.user)
     @participation.destroy
+
+    broadcast_participation_count
 
     respond_to do |format|
       format.turbo_stream
@@ -34,5 +38,16 @@ class EventParticipationsController < ApplicationController
 
   def set_event
     @event = Event.find(params[:event_id])
+  end
+
+  def broadcast_participation_count
+    @event.participations.reload
+    EventParticipationsChannel.broadcast_to(
+      @event,
+      html: render_to_string(
+        partial: "event_participations/participation_count",
+        locals: { event: @event }
+      )
+    )
   end
 end
