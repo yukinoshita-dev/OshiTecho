@@ -1,0 +1,84 @@
+<% content_for :title, "推し手帳 - 推し活をもっと楽しく" %>
+
+<%# ヒーローセクション %>
+<section class="text-center py-12 px-4">
+  <div class="notebook-card inline-block px-8 py-10 max-w-2xl">
+    <p class="text-4xl mb-3">📔</p>
+    <h1 class="text-3xl font-bold mb-3" style="font-family: var(--font-heading);">推し手帳</h1>
+    <p class="text-base mb-6" style="color: var(--color-text-muted);">
+      推し活をまるごと記録する、あなただけのファン手帳。<br>
+      イベント・グッズ・活動ログをまとめて管理しよう。
+    </p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <%= link_to "無料ではじめる", new_registration_path,
+            class: "px-6 py-3 rounded font-bold text-white transition-colors",
+            style: "background-color: var(--color-primary);" %>
+      <%= link_to "ログイン", new_session_path,
+            class: "px-6 py-3 rounded font-bold border transition-colors",
+            style: "border-color: var(--color-primary); color: var(--color-primary);" %>
+    </div>
+  </div>
+</section>
+
+<%# 機能紹介 %>
+<section class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <% [
+    ["🎫", "イベント管理",    "コンサート・舞台・握手会など、参加したイベントをすべて記録。チケット代・座席・交通手段まで詳しく残せます。"],
+    ["🧸", "グッズ管理",      "推しグッズの購入記録を一元管理。月別の出費集計でお財布の状況も一目瞭然。"],
+    ["📝", "活動ログ",        "現場のレポートをマークダウンで記録。写真・セトリ・感想をまとめておけます。"],
+    ["📅", "カレンダー共有",  "FFのイベントを一緒に確認。記念日・誕生日も登録して推し愛を育てよう。"],
+    ["👥", "フォロー機能",    "同担・同オタの仲間とつながる。公開イベントのタイムラインで情報収集も。"],
+    ["🎨", "4テーマ対応",     "Classic・Girly・Natural・Cool の4テーマから好きな見た目を選べます。"],
+  ].each do |icon, title, desc| %>
+    <div class="notebook-card p-4 space-y-2">
+      <p class="text-2xl"><%= icon %></p>
+      <h3 class="font-bold text-base" style="font-family: var(--font-heading);"><%= title %></h3>
+      <p class="text-sm" style="color: var(--color-text-muted);"><%= desc %></p>
+    </div>
+  <% end %>
+</section>
+
+<%# テーマデモ %>
+<section class="mt-12">
+  <h2 class="text-xl font-bold text-center mb-6" style="font-family: var(--font-heading);">
+    4つのテーマから選べます
+  </h2>
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <% [
+      ["classic",  "🪵", "Classic",  "#faf8f2", "#f5f0e8", "#8b6344", "#d4b896"],
+      ["girly",    "🌸", "Girly",    "#fff5f7", "#ffedf1", "#e8648a", "#f9c0cc"],
+      ["natural",  "🌿", "Natural",  "#f8f7f2", "#f0ede3", "#5a7c5a", "#b8c9a3"],
+      ["cool",     "🌙", "Cool",     "#0f1117", "#1a1d27", "#6c8ebf", "#2d3450"],
+    ].each do |theme, icon, label, bg, surface, primary, border| %>
+      <div class="rounded-lg overflow-hidden border-2 text-xs"
+           style="background: <%= bg %>; border-color: <%= border %>;">
+        <div class="px-3 py-2 font-bold flex items-center gap-2"
+             style="background: <%= surface %>; color: <%= primary %>; border-bottom: 1px solid <%= border %>;">
+          <span class="text-base"><%= icon %></span>
+          <span><%= label %></span>
+        </div>
+        <div class="p-3 space-y-2" style="color: <%= primary %>;">
+          <div class="rounded p-2" style="background: <%= surface %>; border: 1px solid <%= border %>;">
+            <p class="font-medium opacity-80">イベント記録</p>
+            <p class="opacity-60 text-xs mt-1">2024.12.25 Zepp Tokyo</p>
+          </div>
+          <div class="px-3 py-1 rounded-full text-xs text-center font-bold"
+               style="background: <%= primary %>; color: <%= bg %>;">
+            フォロー中
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<%# CTA %>
+<section class="mt-12 text-center pb-12">
+  <div class="notebook-card inline-block px-8 py-6 max-w-lg">
+    <p class="font-bold text-lg mb-2" style="font-family: var(--font-heading);">さっそくはじめよう</p>
+    <p class="text-sm mb-4" style="color: var(--color-text-muted);">無料・登録簡単。推し活をもっと豊かに。</p>
+    <%= link_to "無料アカウントを作成", new_registration_path,
+          class: "inline-block px-8 py-3 rounded font-bold text-white",
+          style: "background-color: var(--color-primary);" %>
+  </div>
+</section>
