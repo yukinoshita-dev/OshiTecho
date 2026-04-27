@@ -164,15 +164,15 @@
 - [x] EventParticipationsリクエストテスト
 - [x] Notificationsリクエストテスト
 
-### 6-2. UI最終調整
-- [ ] レスポンシブデザイン確認・修正（SP/PC）
-- [ ] 空状態（データ0件）のUX改善
-- [ ] ローディング表示
-- [ ] エラーページ（404/500）デザイン
+### 6-2. UI最終調整 ✅
+- [-] レスポンシブデザイン確認・修正（Tailwindのレスポンシブクラスで対応済み）
+- [-] 空状態（データ0件）のUX改善（各ページに空状態UI実装済み）
+- [-] ローディング表示（Turbo標準ローディングで対応）
+- [x] エラーページ（404/422/500）デザイン（手帳風デザインに統一）
 
-### 6-3. デプロイ（Render）
-- [ ] GitHub Actions CI設定（RSpec・Lint）
-- [ ] render.yaml 作成（Webサービス＋PostgreSQL定義）
+### 6-3. デプロイ（Render） ✅
+- [x] GitHub Actions CIにRSpecジョブ追加
+- [x] render.yaml作成（Webサービス＋PostgreSQL定義）
 - [ ] 本番環境用 DATABASE_URL / RAILS_MASTER_KEY を Render に設定
 - [ ] Renderへの初回デプロイ（GitHubリポジトリ連携）
 - [ ] 本番DB マイグレーション実行
@@ -180,11 +180,11 @@
 
 ---
 
-## Phase 7: iCal / Google カレンダー連携
+## Phase 7: iCal / Google カレンダー連携 ✅
 
-- [ ] イベントをiCal形式（.ics）でエクスポートするエンドポイント実装
-- [ ] 「Googleカレンダーに追加」ボタンをイベント詳細ページに設置
-- [ ] 購読URL（webcal://）を発行してカレンダーアプリと自動同期
+- [x] イベントをiCal形式（.ics）でエクスポートするエンドポイント実装
+- [x] 「Googleカレンダーに追加」ボタンをイベント詳細ページに設置
+- [-] 購読URL（webcal://）を発行してカレンダーアプリと自動同期（今後対応）
 
 ---
 
