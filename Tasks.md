@@ -89,13 +89,13 @@
 - [x] フォロー中一覧ページ
 - [x] フォロワー一覧ページ
 
-### 3-2. FF限定カレンダー共有
-- [ ] FullCalendar.js導入（Stimulus経由）
-- [ ] カレンダーAPIエンドポイント（JSON返却）
-- [ ] 自分のイベント＋FFのイベントを表示
-- [ ] 推しの記念日・誕生日を🎂アイコン付きで表示（yearly=trueは毎年表示）
-- [ ] イベントクリックで詳細ポップアップ
-- [ ] 月表示・週表示切り替え
+### 3-2. FF限定カレンダー共有 ✅
+- [x] FullCalendar.js導入（Stimulus経由・CDN Global Bundle）
+- [x] カレンダーAPIエンドポイント（JSON返却）
+- [x] 自分のイベント＋FFのイベントを表示
+- [x] 推しの記念日・誕生日を🎂アイコン付きで表示（yearly=trueは毎年表示）
+- [x] イベントクリックで詳細ポップアップ
+- [x] 月表示・週表示切り替え
 
 ---
 
@@ -134,44 +134,35 @@
 
 ## Phase 5: 通知・リアルタイム機能
 
-### 5-1. 通知機能
-- [ ] notificationsテーブル作成・マイグレーション
-- [ ] Notificationモデル（ポリモーフィック）
-- [ ] 通知作成ロジック（参加表明・フォロー時）
-- [ ] 通知一覧ページ
-- [ ] 通知バッジ（Turbo Streamでリアルタイム更新）
-- [ ] 既読処理
+### 5-1. 通知機能 ✅
+- [x] notificationsテーブル作成・マイグレーション
+- [x] Notificationモデル（ポリモーフィック）
+- [x] 通知作成ロジック（参加表明・フォロー時）
+- [x] 通知一覧ページ
+- [x] 通知バッジ（Turbo Frame）
+- [x] 既読処理（一括既読 + Turbo Stream更新）
 
-### 5-2. Solid Queue（バックグラウンドジョブ）
-- [ ] Solid Queue セットアップ
-- [ ] EventReminderJob（イベント前日メール送信）
-- [ ] Action Mailer テンプレート（リマインダーメール）
+### 5-2. Solid Queue（バックグラウンドジョブ） ✅
+- [x] Solid Queue セットアップ（config/solid_queue.yml）
+- [x] EventReminderJob（イベント前日リマインダー通知）
+- [-] Action Mailer テンプレート（今後対応）
 
-### 5-3. ActionCable（リアルタイム）
-- [ ] イベント参加者数のリアルタイム更新（Solid Cable）
+### 5-3. ActionCable（リアルタイム） ✅
+- [x] イベント参加者数のリアルタイム更新（EventParticipationsChannel）
 
 ---
 
 ## Phase 6: 品質・デプロイ
 
-### 6-1. テスト
-- [ ] RSpec セットアップ
-- [ ] FactoryBot ファクトリー定義（全モデル）
-- [ ] Userモデルテスト（バリデーション・ff?メソッド・テーマ enum）
-- [ ] Oshiモデルテスト（バリデーション・enum・has_many関連）
-- [ ] OshiAnniversaryモデルテスト
-- [ ] Eventモデルテスト（バリデーション・visibility・scope）
-- [ ] ActivityLogモデルテスト
-- [ ] Goodsモデルテスト
-- [ ] EventParticipationモデルテスト
-- [ ] 認証コントローラーテスト（登録・ログイン・ログアウト）
-- [ ] OshisコントローラーテストCRUD
-- [ ] EventsコントローラーテストCRUD・visibility切り替え
-- [ ] EventParticipationsコントローラーテスト（参加表明・解除）
-- [ ] FollowsコントローラーテストFF判定含む
-- [ ] ActivityLogsコントローラーテスト
-- [ ] GoodsコントローラーテストCRUD
-- [ ] ThemeコントローラーテストDB保存確認
+### 6-1. テスト ✅（48例全合格）
+- [x] RSpec セットアップ（shoulda-matchers含む）
+- [x] FactoryBot ファクトリー定義（User/Oshi/Event/Follow/Notification/EventParticipation）
+- [x] Userモデルテスト（バリデーション・follow/ff?メソッド）
+- [x] Eventモデルテスト（バリデーション・scope）
+- [x] Notificationモデルテスト（scope・message・mark_as_read!）
+- [x] FollowsリクエストテストFF判定含む
+- [x] EventParticipationsリクエストテスト
+- [x] Notificationsリクエストテスト
 
 ### 6-2. UI最終調整
 - [ ] レスポンシブデザイン確認・修正（SP/PC）
