@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :events do
     resources :participations, only: [:create, :destroy],
               controller: "event_participations"
+    get :export_ical, on: :member
   end
   get "users/:username", to: "profiles#show", as: :user_profile
   resources :users, only: [] do

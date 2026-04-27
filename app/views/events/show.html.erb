@@ -96,9 +96,15 @@
     </div>
   </div>
 
-  <div class="flex gap-3">
+  <div class="flex gap-3 flex-wrap">
     <%= link_to "編集", edit_event_path(@event), class: "btn-primary" %>
     <%= link_to "一覧に戻る", events_path, class: "tab-seal" %>
+    <%= link_to "📅 iCal", export_ical_event_path(@event), class: "tab-seal text-xs" %>
+    <% google_url = "https://calendar.google.com/calendar/render?action=TEMPLATE" \
+        "&text=#{CGI.escape(@event.title)}" \
+        "&dates=#{@event.event_date.strftime('%Y%m%d')}/#{(@event.event_date + 1).strftime('%Y%m%d')}" \
+        "#{@event.venue.present? ? "&location=#{CGI.escape(@event.venue)}" : ""}" %>
+    <%= link_to "📅 Google", google_url, target: "_blank", rel: "noopener noreferrer", class: "tab-seal text-xs" %>
     <%= button_to "削除", event_path(@event), method: :delete,
           data: { turbo_confirm: "#{@event.title} を削除してよいですか？" },
           class: "tab-seal cursor-pointer ml-auto" %>

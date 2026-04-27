@@ -29,6 +29,9 @@ gem "bcrypt", "~> 3.1.7"
 # Pagination
 gem "pagy", "~> 9.0"
 
+# iCal export
+gem "icalendar"
+
 # Markdown rendering
 gem "redcarpet"
 
