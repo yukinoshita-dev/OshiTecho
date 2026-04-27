@@ -37,5 +37,6 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   get "dashboard", to: "dashboard#index", as: :dashboard
+  get "reports/annual", to: "reports#annual", as: :annual_report
   root "home#index"
 end
