@@ -2,7 +2,11 @@
 
 <div class="flex items-center justify-between mb-4">
   <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);">🧸 グッズ管理</h1>
-  <%= link_to "＋ グッズを追加", new_good_path, class: "btn-primary" %>
+  <div class="flex items-center gap-2">
+    <%= link_to "📥 CSV出力", goods_path(format: :csv, oshi_id: @oshi_filter, category: @category_filter, ym: @ym_filter),
+          class: "tab-seal text-sm" %>
+    <%= link_to "＋ グッズを追加", new_good_path, class: "btn-primary" %>
+  </div>
 </div>
 
 <%# フィルターバー %>

@@ -1,3 +1,5 @@
+require "csv"
+
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy, :export_ical]
 
@@ -7,6 +9,42 @@ class EventsController < ApplicationController
     scope = scope.by_oshi(@oshi.id) if @oshi
     scope = params[:past] == "1" ? scope.past : scope.upcoming
     @events = scope
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        event_type_labels = { "live" => "ライブ", "handshake" => "握手会", "talk" => "トークイベント",
+                              "online" => "オンライン", "release" => "リリースイベント", "other" => "その他" }
+        payment_labels = { "unpaid" => "未払い", "paid" => "支払済み", "refunded" => "払い戻し済み" }
+        transport_labels = { "none" => "なし", "train" => "電車", "bus" => "バス",
+                             "car" => "車", "plane" => "飛行機", "other_transport" => "その他" }
+
+        csv_data = CSV.generate(headers: true) do |csv|
+          csv << %w[タイトル 種別 推し 開催日 開演時刻 終演時刻 会場 チケット代（円） 支払状況 座席 遠征 交通手段 公開設定]
+          @events.each do |event|
+            csv << [
+              event.title,
+              event_type_labels[event.event_type],
+              event.oshi&.name,
+              event.event_date&.strftime("%Y-%m-%d"),
+              event.start_time&.strftime("%H:%M"),
+              event.end_time&.strftime("%H:%M"),
+              event.venue,
+              event.ticket_price,
+              payment_labels[event.payment_status],
+              event.seat,
+              event.expedition? ? "あり" : "なし",
+              transport_labels[event.transport],
+              event.public_visible? ? "公開" : "非公開"
+            ]
+          end
+        end
+        send_data "﻿#{csv_data}",
+                  filename: "events_#{Date.current}.csv",
+                  type: "text/csv; charset=utf-8",
+                  disposition: "attachment"
+      end
+    end
   end
 
   def show

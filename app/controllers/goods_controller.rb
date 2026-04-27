@@ -1,3 +1,5 @@
+require "csv"
+
 class GoodsController < ApplicationController
   before_action :set_good, only: [:edit, :update, :destroy]
 
@@ -21,6 +23,29 @@ class GoodsController < ApplicationController
                                .group_by { |g| g.purchase_date.strftime("%Y-%m") }
                                .transform_values { |gs| gs.sum(&:price) }
                                .sort.reverse.first(12).to_h
+
+    respond_to do |format|
+      format.html
+      format.csv do
+        csv_data = CSV.generate(headers: true) do |csv|
+          csv << %w[名前 カテゴリ 推し 購入日 価格（円） メモ]
+          @goods.each do |good|
+            csv << [
+              good.name,
+              good.category,
+              good.oshi&.name,
+              good.purchase_date&.strftime("%Y-%m-%d"),
+              good.price,
+              good.note
+            ]
+          end
+        end
+        send_data "﻿#{csv_data}",
+                  filename: "goods_#{Date.current}.csv",
+                  type: "text/csv; charset=utf-8",
+                  disposition: "attachment"
+      end
+    end
   end
 
   def new

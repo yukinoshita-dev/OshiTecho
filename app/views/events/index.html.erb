@@ -2,7 +2,11 @@
 
 <div class="flex items-center justify-between mb-4">
   <h1 class="text-2xl font-bold" style="font-family: var(--font-heading);">イベント一覧</h1>
-  <%= link_to "＋ イベントを追加", new_event_path, class: "btn-primary" %>
+  <div class="flex items-center gap-2">
+    <%= link_to "📥 CSV出力", events_path(format: :csv, oshi_id: params[:oshi_id], past: params[:past]),
+          class: "tab-seal text-sm" %>
+    <%= link_to "＋ イベントを追加", new_event_path, class: "btn-primary" %>
+  </div>
 </div>
 
 <%# フィルター %>
