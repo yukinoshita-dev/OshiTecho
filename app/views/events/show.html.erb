@@ -70,7 +70,7 @@
           <dd><%= @event.seat %></dd>
         </div>
       <% end %>
-      <% unless @event.none? %>
+      <% unless @event.transport_none? %>
         <div class="flex gap-4">
           <dt class="text-muted w-20 shrink-0">交通手段</dt>
           <dd><%= [["none","なし"],["train","電車"],["bus","バス"],["car","車"],["plane","飛行機"],["other_transport","その他"]].to_h[@event.transport] %></dd>

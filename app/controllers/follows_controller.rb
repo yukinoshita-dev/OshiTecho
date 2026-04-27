@@ -2,8 +2,9 @@ class FollowsController < ApplicationController
   before_action :set_target_user
 
   def create
-    Current.user.follow(@target_user)
-    @target_user.notifications.create!(actor: Current.user, action: "follow")
+    if Current.user.follow(@target_user)
+      @target_user.notifications.create!(actor: Current.user, action: "follow")
+    end
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_back fallback_location: user_profile_path(@target_user.username) }
