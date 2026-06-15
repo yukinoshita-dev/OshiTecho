@@ -27,7 +27,7 @@ gem "jbuilder"
 gem "bcrypt", "~> 3.1.7"
 
 # Pagination
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 43.5"
 
 # iCal export
 gem "icalendar"
