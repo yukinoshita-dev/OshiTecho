@@ -5,7 +5,7 @@ gem "rails", "~> 8.1.3"
 
 # Pin irb/rdoc/psych to avoid needing libyaml native compilation on Windows
 gem "irb", "~> 1.13"
-gem "rdoc", "~> 6.6"
+gem "rdoc", "~> 7.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
